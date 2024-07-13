@@ -4,5 +4,5 @@
     "outDir": "dist",
     "resolveJsonModule": true
   },
-  "include": ["src"]
+  "include": ["src", "stremio-addon-sdk.d.ts"]
 }
