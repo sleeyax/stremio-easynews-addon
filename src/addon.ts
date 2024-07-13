@@ -73,7 +73,9 @@ builder.defineMetaHandler(async ({ id, config }) => {
           behaviorHints: {
             notWebReady: true,
             proxyHeaders: {
-              Authorization: createBasic(config.username, config.password),
+              request: {
+                Authorization: createBasic(config.username, config.password),
+              },
             },
           } as Stream['behaviorHints'],
         },
