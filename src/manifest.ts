@@ -5,7 +5,7 @@ const { version, description } = require('../package.json');
 export const catalog: ManifestCatalog = {
   id: 'easynews-plus',
   name: 'Easynews+',
-  type: 'series',
+  type: 'tv',
   extra: [{ name: 'search', isRequired: true }],
 };
 
@@ -16,10 +16,10 @@ export const manifest: Manifest = {
   catalogs: [catalog],
   resources: [
     'catalog',
-    { name: 'meta', types: ['series'], idPrefixes: [catalog.id] },
+    { name: 'meta', types: ['tv'], idPrefixes: [catalog.id] },
     { name: 'stream', types: ['movie', 'series'], idPrefixes: ['tt'] },
   ],
-  types: ['movie', 'series'],
+  types: ['movie', 'series', 'tv'],
   name: 'Easynews+',
   background:
     'https://images.pexels.com/photos/2521619/pexels-photo-2521619.jpeg',

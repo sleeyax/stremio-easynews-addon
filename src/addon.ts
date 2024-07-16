@@ -23,7 +23,7 @@ builder.defineCatalogHandler(async ({ extra: { search } }) => {
       {
         id: `${prefix}${search}`,
         name: search,
-        type: 'series',
+        type: 'tv',
         logo: manifest.logo,
         background: manifest.background,
         posterShape: 'square',
@@ -87,7 +87,7 @@ builder.defineMetaHandler(async ({ id, config }) => {
     meta: {
       id: `${prefix}${search}`,
       name: search,
-      type: 'series',
+      type: 'tv',
       logo: manifest.logo,
       background: manifest.background,
       poster: manifest.logo,
