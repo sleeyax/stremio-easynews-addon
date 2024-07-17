@@ -1,8 +1,0 @@
-{
-  "extends": "@tsconfig/node22/tsconfig.json",
-  "compilerOptions": {
-    "outDir": "dist",
-    "resolveJsonModule": true
-  },
-  "include": ["src", "stremio-addon-sdk.d.ts"]
-}
