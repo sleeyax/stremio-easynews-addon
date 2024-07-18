@@ -56,30 +56,13 @@ export class EasynewsAPI {
     return json as EasynewsSearchResponse;
   }
 
-  async searchAll(
-    query: string
-  ): Promise<
-    { data: FileData[] } & Pick<
-      EasynewsSearchResponse,
-      'downURL' | 'dlFarm' | 'dlPort'
-    >
-  > {
+  async searchAll(query: string): Promise<EasynewsSearchResponse> {
     const data: FileData[] = [];
+    let res: EasynewsSearchResponse;
     let pageNr = 1;
-    let downURL = 'https://members.easynews.com/dl';
-    let dlFarm = 'auto';
-    let dlPort = 443;
 
     while (true) {
-      const res = await this.search(query, pageNr);
-
-      // Get other parameters from the first response.
-      // It should be the same for all pages, so we only need to get it once.
-      if (pageNr === 1) {
-        downURL = res.downURL;
-        dlFarm = res.dlFarm;
-        dlPort = res.dlPort;
-      }
+      res = await this.search(query, pageNr);
 
       // No more results.
       if (res.data.length === 0) {
@@ -91,6 +74,8 @@ export class EasynewsAPI {
       pageNr++;
     }
 
-    return { data, downURL, dlFarm, dlPort };
+    res.data = data;
+
+    return res;
   }
 }
