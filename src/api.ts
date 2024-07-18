@@ -15,7 +15,7 @@ export class EasynewsAPI {
     this.headers.append('Authorization', basic);
   }
 
-  async search(query: string, pageNr = 1) {
+  async search(query: string, pageNr = 1, maxResults = 1000) {
     const searchParams = {
       st: 'adv',
       sb: '1',
@@ -32,7 +32,7 @@ export class EasynewsAPI {
       s2d: '-',
       s3: 'dtime',
       s3d: '-',
-      pby: '1000',
+      pby: maxResults.toString(),
       safeO: '0',
       gps: query,
     };
