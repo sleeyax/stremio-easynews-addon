@@ -1,5 +1,5 @@
 import { createBasic } from './utils';
-import { EasynewsSearchResponse } from './types';
+import { EasynewsSearchResponse, FileData } from './types';
 
 export class EasynewsAPI {
   private readonly baseUrl = 'https://members.easynews.com';
@@ -15,7 +15,7 @@ export class EasynewsAPI {
     this.headers.append('Authorization', basic);
   }
 
-  async search(query: string) {
+  async search(query: string, pageNr = 1) {
     const searchParams = {
       st: 'adv',
       sb: '1',
@@ -24,7 +24,7 @@ export class EasynewsAPI {
       spamf: '1',
       u: '1',
       gx: '1',
-      pno: '1',
+      pno: pageNr.toString(),
       sS: '3',
       s1: 'relevance',
       s1d: '-',
@@ -54,5 +54,43 @@ export class EasynewsAPI {
     const json = await res.json();
 
     return json as EasynewsSearchResponse;
+  }
+
+  async searchAll(
+    query: string
+  ): Promise<
+    { data: FileData[] } & Pick<
+      EasynewsSearchResponse,
+      'downURL' | 'dlFarm' | 'dlPort'
+    >
+  > {
+    const data: FileData[] = [];
+    let pageNr = 1;
+    let downURL = 'https://members.easynews.com/dl';
+    let dlFarm = 'auto';
+    let dlPort = 443;
+
+    while (true) {
+      const res = await this.search(query, pageNr);
+
+      // Get other parameters from the first response.
+      // It should be the same for all pages, so we only need to get it once.
+      if (pageNr === 1) {
+        downURL = res.downURL;
+        dlFarm = res.dlFarm;
+        dlPort = res.dlPort;
+      }
+
+      // No more results.
+      if (res.data.length === 0) {
+        break;
+      }
+
+      data.push(...res.data);
+
+      pageNr++;
+    }
+
+    return { data, downURL, dlFarm, dlPort };
   }
 }

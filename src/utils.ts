@@ -38,7 +38,7 @@ export function createStreamUrl({
   downURL,
   dlFarm,
   dlPort,
-}: EasynewsSearchResponse) {
+}: Pick<EasynewsSearchResponse, 'downURL' | 'dlFarm' | 'dlPort'>) {
   return `${downURL}/${dlFarm}/${dlPort}`;
 }
 

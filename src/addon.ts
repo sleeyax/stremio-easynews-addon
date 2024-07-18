@@ -40,11 +40,9 @@ builder.defineMetaHandler(async ({ id, config }) => {
   const videos: MetaVideo[] = [];
 
   const api = new EasynewsAPI(config);
-  const results = await api.search(search);
+  const res = await api.searchAll(search);
 
-  const files = results?.data ?? [];
-
-  for (const file of files) {
+  for (const file of res?.data ?? []) {
     if (isBadVideo(file)) {
       continue;
     }
@@ -58,7 +56,7 @@ builder.defineMetaHandler(async ({ id, config }) => {
 
     const size = getSize(file);
     const duration = getDuration(file);
-    const fileDl = `${createStreamUrl(results)}/${createStreamPath(file)}|${createStreamAuth(config)}`;
+    const fileDl = `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(config)}`;
 
     videos.push({
       id: `${prefix}${file.sig}`,
@@ -114,9 +112,7 @@ builder.defineStreamHandler(async ({ id, config }) => {
 
   const streams: Stream[] = [];
 
-  const files = results.data ?? [];
-
-  for (const file of files) {
+  for (const file of results.data ?? []) {
     if (isBadVideo(file)) {
       continue;
     }
