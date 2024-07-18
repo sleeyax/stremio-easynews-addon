@@ -1,4 +1,4 @@
-import { addonBuilder, MetaVideo, Stream } from 'stremio-addon-sdk';
+import { addonBuilder, MetaDetail, MetaVideo, Stream } from 'stremio-addon-sdk';
 import { catalog, manifest } from './manifest';
 import { EasynewsAPI } from './api';
 import {
@@ -36,6 +36,10 @@ builder.defineCatalogHandler(async ({ extra: { search } }) => {
 });
 
 builder.defineMetaHandler(async ({ id, config }) => {
+  if (!id.startsWith(catalog.id)) {
+    return { meta: null as unknown as MetaDetail };
+  }
+
   const search = id.replace(prefix, '');
 
   const videos: MetaVideo[] = [];
@@ -100,7 +104,7 @@ builder.defineMetaHandler(async ({ id, config }) => {
 });
 
 builder.defineStreamHandler(async ({ id, config }) => {
-  if (!manifest.idPrefixes?.some((prefix) => id.startsWith(prefix))) {
+  if (!id.startsWith('tt')) {
     return { streams: [] };
   }
 
