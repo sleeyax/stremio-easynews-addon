@@ -65,3 +65,13 @@ export function getDuration(file: FileData) {
 export function getSize(file: FileData) {
   return file['4'] ?? '';
 }
+
+export function createThumbnailUrl(
+  res: EasynewsSearchResponse,
+  file: FileData
+) {
+  const id = file['0'];
+  const idChars = id.slice(0, 3);
+  const thumbnailSlug = file['10'];
+  return `${res.thumbURL}${idChars}/pr-${id}.jpg/th-${thumbnailSlug}.jpg`;
+}

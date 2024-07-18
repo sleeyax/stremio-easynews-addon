@@ -6,6 +6,7 @@ import {
   createStreamAuth,
   createStreamPath,
   createStreamUrl,
+  createThumbnailUrl,
   getDuration,
   getPostTitle,
   getSize,
@@ -57,12 +58,14 @@ builder.defineMetaHandler(async ({ id, config }) => {
     const size = getSize(file);
     const duration = getDuration(file);
     const fileDl = `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(config)}`;
+    const thumbnail = createThumbnailUrl(res, file);
 
     videos.push({
       id: `${prefix}${file.sig}`,
       released: new Date(file['5']).toISOString(),
       title: sanitizedTitle,
       overview: file['6'],
+      thumbnail,
       streams: [
         {
           name: sanitizedTitle,
