@@ -1,0 +1,4 @@
+Modified fetchEasynews to route API requests through the Cloudflare Worker proxy.
+Removed direct handling of authentication headers from the addon; now managed by the Cloudflare Worker.
+Added CORS headers in the proxy to resolve cross-origin request issues.
+Configured behaviorHints in the addon to use proxy headers for request handling.
