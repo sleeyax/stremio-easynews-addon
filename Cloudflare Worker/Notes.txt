@@ -1,0 +1,2 @@
+Adapted to a singleworker from original V1 proxy and script combination to fully utilise CF worker benefits 
+V2 current
