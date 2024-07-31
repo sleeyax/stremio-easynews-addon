@@ -1,8 +1,6 @@
 import { addonBuilder, MetaDetail, MetaVideo, Stream } from 'stremio-addon-sdk';
 import { catalog, manifest } from './manifest';
-import { EasynewsAPI } from './api';
 import {
-  createBasic,
   createStreamAuth,
   createStreamPath,
   createStreamUrl,
@@ -13,6 +11,7 @@ import {
   isBadVideo,
   sanitizeTitle,
 } from './utils';
+import { EasynewsAPI, createBasic } from '@easynews/api';
 
 const builder = new addonBuilder(manifest);
 
