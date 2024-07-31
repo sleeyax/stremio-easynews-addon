@@ -26,5 +26,6 @@
     "prettier": "^3.3.2",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3"
-  }
+  },
+  "packageManager": "pnpm@8.6.1+sha1.435b3c83c7de5c455ad80fd63ee7ecf3b67b949b"
 }

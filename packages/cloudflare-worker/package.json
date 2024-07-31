@@ -1,0 +1,17 @@
+{
+  "name": "@easynews/cloudflare-worker",
+  "version": "0.0.1",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "test": "vitest",
+    "cf-typegen": "wrangler types"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.4.5",
+    "@cloudflare/workers-types": "^4.20240725.0",
+    "vitest": "1.5.0",
+    "wrangler": "^3.67.1"
+  }
+}
