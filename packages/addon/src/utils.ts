@@ -1,12 +1,5 @@
-import { Stream } from 'stremio-addon-sdk';
-import { EasynewsSearchResponse, FileData } from './types';
-import { type Config } from '../stremio-addon-sdk';
-
-export function createBasic(username: string, password: string) {
-  const userInfo = `${username}:${password}`;
-
-  return `Basic ${Buffer.from(userInfo).toString('base64')}`;
-}
+import { EasynewsSearchResponse, FileData } from '@easynews/api';
+import { type Config } from './stremio-addon-sdk';
 
 export function isBadVideo(file: FileData) {
   const duration = file['14'] ?? '';

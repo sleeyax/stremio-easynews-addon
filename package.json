@@ -1,15 +1,14 @@
 {
-  "name": "stremio-easynews-addon",
+  "name": "@easynews/core",
   "version": "1.0.0",
   "main": "dist/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "prepublish": "npm run build",
-    "start": "node dist/server.js",
-    "start:dev": "cross-env NODE_ENV=dev tsx watch src/server.ts",
+    "test": "npm run test --workspaces",
     "format": "prettier --write .",
-    "deploy": "beamup"
+    "build": "tsc --build",
+    "build:watch": "tsc --build --watch",
+    "start:addon": "npm -w packages/addon start",
+    "start:addon:dev": "npm -w packages/addon run start:dev"
   },
   "keywords": [
     "stremio easynews addon",
@@ -18,14 +17,11 @@
   "author": "Sleeyax",
   "license": "MIT",
   "description": "Provides content from Easynews and includes a search catalog.",
-  "dependencies": {
-    "stremio-addon-sdk": "^1.6.10"
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
-    "@tsconfig/node22": "^22.0.0",
     "@types/node": "^20.14.10",
-    "@types/stremio-addon-sdk": "^1.6.11",
-    "beamup-cli": "^1.3.0",
     "cross-env": "^7.0.3",
     "prettier": "^3.3.2",
     "tsx": "^4.16.2",
