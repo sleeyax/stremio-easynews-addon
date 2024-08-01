@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import { getRouter } from 'hono-stremio';
-import addonInterface from '@easynews/addon';
+import { addonInterface, landingHTML } from '@easynews/addon';
 
-const addonRouter = getRouter(addonInterface);
+const addonRouter = getRouter(addonInterface, { landingHTML });
 
 const app = new Hono();
 
