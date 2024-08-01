@@ -135,10 +135,10 @@ builder.defineStreamHandler(async ({ id, type, config }) => {
     }
 
     return { streams };
-  } catch (err) {
+  } catch (error) {
     logError({
       message: 'failed to handle stream',
-      error: err,
+      error,
       context: { resource: 'stream', id, type },
     });
     return { streams: [] };
