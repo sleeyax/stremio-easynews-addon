@@ -28,6 +28,12 @@ Navigate to the URL provided by Cloudflare to verify that the addon is running. 
 You can use the provided Dockerfile to build and run the addon in a container. To do this, you need to have [Docker](https://docs.docker.com/get-docker/) installed on your system.
 
 ```bash
+$ docker run -p 8080:1337 ghcr.io/sleeyax/stremio-easynews-addon:latest
+```
+
+Alternatively, build the image yourself:
+
+```bash
 $ git clone https://github.com/sleeyax/stremio-easynews-addon.git && cd stremio-easynews-addon
 $ docker build -t stremio-easynews-addon .
 $ docker run -p 8080:1337 stremio-easynews-addon
