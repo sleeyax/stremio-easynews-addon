@@ -1,4 +1,6 @@
-import { addonBuilder, MetaDetail, MetaVideo, Stream } from 'stremio-addon-sdk';
+import { MetaDetail, MetaVideo, Stream } from 'stremio-addon-sdk';
+import addonBuilder from 'stremio-addon-sdk/src/builder';
+import landingTemplate from 'stremio-addon-sdk/src/landingTemplate';
 import { catalog, manifest } from './manifest';
 import {
   createStreamAuth,
@@ -148,4 +150,5 @@ builder.defineStreamHandler(async ({ id, config }) => {
   return { streams };
 });
 
-export default builder.getInterface();
+export const addonInterface = builder.getInterface();
+export const landingHTML = landingTemplate(addonInterface.manifest);

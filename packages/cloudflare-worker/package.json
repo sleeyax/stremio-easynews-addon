@@ -1,0 +1,17 @@
+{
+  "name": "@easynews/cloudflare-worker",
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts",
+    "build": "exit 0"
+  },
+  "dependencies": {
+    "@easynews/addon": "^1.0.0",
+    "hono": "^4.5.3",
+    "hono-stremio": "^0.1.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240529.0",
+    "wrangler": "^3.57.2"
+  }
+}
