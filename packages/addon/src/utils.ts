@@ -103,3 +103,11 @@ export function buildSearchQuery(
 
   return query;
 }
+
+export function logError(message: {
+  message: string;
+  error: unknown;
+  context: unknown;
+}) {
+  console.error(message);
+}

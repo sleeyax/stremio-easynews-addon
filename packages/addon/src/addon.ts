@@ -12,6 +12,7 @@ import {
   getPostTitle,
   getSize,
   isBadVideo,
+  logError,
 } from './utils';
 import { EasynewsAPI, createBasic } from '@easynews/api';
 import { publicMetaProvider } from './meta';
@@ -38,7 +39,7 @@ builder.defineCatalogHandler(async ({ extra: { search } }) => {
   };
 });
 
-builder.defineMetaHandler(async ({ id, config }) => {
+builder.defineMetaHandler(async ({ id, type, config }) => {
   try {
     if (!id.startsWith(catalog.id)) {
       return { meta: null as unknown as MetaDetail };
@@ -90,7 +91,11 @@ builder.defineMetaHandler(async ({ id, config }) => {
       },
     };
   } catch (error) {
-    console.error('failed to handle meta', error);
+    logError({
+      message: 'failed to handle meta',
+      error,
+      context: { resource: 'meta', id, type },
+    });
     return { meta: null as unknown as MetaDetail };
   }
 });
@@ -130,8 +135,12 @@ builder.defineStreamHandler(async ({ id, type, config }) => {
     }
 
     return { streams };
-  } catch (err) {
-    console.error('failed to handle stream', err);
+  } catch (error) {
+    logError({
+      message: 'failed to handle stream',
+      error,
+      context: { resource: 'stream', id, type },
+    });
     return { streams: [] };
   }
 });
