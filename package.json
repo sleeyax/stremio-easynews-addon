@@ -16,7 +16,7 @@
   ],
   "author": "Sleeyax",
   "license": "MIT",
-  "description": "Provides content from Easynews and includes a search catalog.",
+  "description": "Provides content from Easynews & includes a search catalog. This addon can also be self-hosted.",
   "workspaces": [
     "packages/*"
   ],

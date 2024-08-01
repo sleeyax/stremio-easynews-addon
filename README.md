@@ -1,6 +1,10 @@
 # stremio-easynews-addon
 
+Provides content from Easynews & includes a search catalog. This addon can also be self-hosted.
+
 ## Developers
+
+### Development
 
 Clone the repository and install the dependencies:
 
@@ -16,7 +20,7 @@ Run the easynews addon in development mode:
 $ npm run start:addon:dev
 ```
 
-## Production
+### Production
 
 ```bash
 $ npm i
