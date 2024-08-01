@@ -2,6 +2,8 @@
 
 Provides content from Easynews & includes a search catalog. This addon can also be [self-hosted](#self-hosting).
 
+Public instance: [b89262c192b0-stremio-easynews-addon.baby-beamup.club](https://b89262c192b0-stremio-easynews-addon.baby-beamup.club/).
+
 ## Self-hosting
 
 To get results in a fast and private manner, you may wish to self-host the addon. This is easy to do, and only requires a few steps. We support multiple ways of self-hosting:
