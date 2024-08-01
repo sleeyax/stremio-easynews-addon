@@ -9,7 +9,9 @@
     "build:watch": "tsc --build --watch",
     "start:addon": "npm -w packages/addon start",
     "start:addon:dev": "npm -w packages/addon run start:dev",
-    "deploy:beamup": "beamup"
+    "start:cloudflare-worker:dev": "npm -w packages/cloudflare-worker run dev",
+    "deploy:beamup": "beamup",
+    "deploy:cloudflare-worker": "npm -w packages/cloudflare-worker run deploy"
   },
   "keywords": [
     "stremio easynews addon",
