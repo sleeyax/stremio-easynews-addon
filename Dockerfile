@@ -19,8 +19,7 @@ COPY packages/api ./packages/api
 COPY packages/addon ./packages/addon
 
 # Build the project.
-RUN npm run build -w packages/api 
-RUN npm run build -w packages/addon
+RUN npm run build
 
 # Remove development dependencies.
 RUN npm --workspaces prune --omit=dev

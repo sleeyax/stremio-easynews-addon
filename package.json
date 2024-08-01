@@ -5,7 +5,7 @@
   "scripts": {
     "test": "npm run test --workspaces",
     "format": "prettier --write .",
-    "build": "tsc --build",
+    "build": "npm -w packages/api run build && npm -w packages/addon run build",
     "build:watch": "tsc --build --watch",
     "start:addon": "npm -w packages/addon start",
     "start:addon:dev": "npm -w packages/addon run start:dev",
