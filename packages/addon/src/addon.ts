@@ -1,4 +1,5 @@
-import { addonBuilder, MetaDetail, MetaVideo, Stream } from 'stremio-addon-sdk';
+import { MetaDetail, MetaVideo, Stream } from 'stremio-addon-sdk';
+import addonBuilder from 'stremio-addon-sdk/src/builder';
 import { catalog, manifest } from './manifest';
 import {
   createStreamAuth,
