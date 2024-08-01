@@ -3,6 +3,7 @@ import addonBuilder from 'stremio-addon-sdk/src/builder';
 import landingTemplate from 'stremio-addon-sdk/src/landingTemplate';
 import { catalog, manifest } from './manifest';
 import {
+  buildSearchQuery,
   createStreamAuth,
   createStreamPath,
   createStreamUrl,
@@ -13,7 +14,13 @@ import {
   isBadVideo,
   sanitizeTitle,
 } from './utils';
-import { EasynewsAPI, createBasic } from '@easynews/api';
+import {
+  EasynewsAPI,
+  EasynewsSearchResponse,
+  createBasic,
+} from '@easynews/api';
+import { publicMetaProvider } from './meta';
+import { Config } from './stremio-addon-sdk';
 
 const builder = new addonBuilder(manifest);
 
@@ -53,38 +60,22 @@ builder.defineMetaHandler(async ({ id, config }) => {
       continue;
     }
 
-    const postTitle = getPostTitle(file);
-
-    const sanitizedTitle = sanitizeTitle(postTitle);
-    if (!sanitizedTitle.toLowerCase().includes(search.toLowerCase())) {
-      continue;
-    }
-
-    const size = getSize(file);
-    const duration = getDuration(file);
-    const fileDl = `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(config)}`;
-    const thumbnail = createThumbnailUrl(res, file);
+    const title = getPostTitle(file);
 
     videos.push({
       id: `${prefix}${file.sig}`,
       released: new Date(file['5']).toISOString(),
-      title: sanitizedTitle,
+      title,
       overview: file['6'],
-      thumbnail,
+      thumbnail: createThumbnailUrl(res, file),
       streams: [
-        {
-          name: sanitizedTitle,
-          description: `${postTitle} (${duration}) - ${size}MB`,
-          url: fileDl,
-          behaviorHints: {
-            notWebReady: true,
-            proxyHeaders: {
-              request: {
-                Authorization: createBasic(config.username, config.password),
-              },
-            },
-          } as Stream['behaviorHints'],
-        },
+        mapStream({
+          config,
+          title,
+          duration: getDuration(file),
+          size: getSize(file),
+          url: `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(config)}`,
+        }),
       ],
     });
   }
@@ -104,51 +95,75 @@ builder.defineMetaHandler(async ({ id, config }) => {
   };
 });
 
-builder.defineStreamHandler(async ({ id, config }) => {
+builder.defineStreamHandler(async ({ id, type, config }) => {
   if (!id.startsWith('tt')) {
     return { streams: [] };
   }
 
-  const search = id;
+  const meta = await publicMetaProvider(id, type);
+  const searchQuery = buildSearchQuery(type, meta);
 
   const api = new EasynewsAPI(config);
-  const results = await api.search(search);
+  const res = await api.search(searchQuery);
 
-  if (!results || !results.data) {
+  if (!res || !res.data) {
     return { streams: [] };
   }
 
   const streams: Stream[] = [];
 
-  for (const file of results.data ?? []) {
+  for (const file of res.data ?? []) {
     if (isBadVideo(file)) {
       continue;
     }
 
-    const postTitle = getPostTitle(file);
-
-    const sanitizedTitle = sanitizeTitle(postTitle);
-    if (!sanitizedTitle.toLowerCase().includes(search.toLowerCase())) {
-      continue;
-    }
-
-    const size = getSize(file);
-    const duration = getDuration(file);
-
-    const fileDl = `${createStreamUrl(results)}/${createStreamPath(file)}|${createStreamAuth(config)}`;
-
-    streams.push({
-      name: sanitizedTitle,
-      description: `${postTitle} (${duration}) - ${size}MB`,
-      url: fileDl,
-      behaviorHints: {
-        notWebReady: sanitizedTitle.includes('HDR'),
-      },
-    });
+    streams.push(
+      mapStream({
+        config,
+        duration: getDuration(file),
+        size: getSize(file),
+        title: getPostTitle(file),
+        url: `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(config)}`,
+      })
+    );
   }
 
   return { streams };
 });
+
+function mapStream({
+  config,
+  duration,
+  size,
+  title,
+  url,
+}: {
+  title: string;
+  duration: string | undefined;
+  size: string | undefined;
+  url: string;
+  config: Config;
+}): Stream {
+  return {
+    name: 'Easynews+',
+    title: title,
+    description: [
+      title,
+      `🕛 ${duration ?? 'unknown duration'}`,
+      `📦 ${size ?? 'unknown size'}`,
+    ].join('\n'),
+    url: url,
+    behaviorHints: {
+      notWebReady: true,
+      proxyHeaders: {
+        request: {
+          'User-Agent': 'Stremio',
+          Authorization: createBasic(config.username, config.password),
+        },
+      },
+    } as Stream['behaviorHints'],
+  };
+}
 
 export const addonInterface = builder.getInterface();
 export const landingHTML = landingTemplate(addonInterface.manifest);

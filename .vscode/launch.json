@@ -1,12 +1,12 @@
 {
   "version": "0.2.0",
-
   "configurations": [
     {
-      "name": "tsx",
+      "name": "debug addon",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/src/server.ts",
+      "program": "src/server.ts",
+      "localRoot": "${workspaceFolder}/packages/addon",
       "runtimeExecutable": "tsx",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
