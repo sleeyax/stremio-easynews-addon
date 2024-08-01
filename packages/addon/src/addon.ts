@@ -1,4 +1,4 @@
-import { MetaDetail, MetaVideo, Stream } from 'stremio-addon-sdk';
+import { Cache, MetaDetail, MetaVideo, Stream } from 'stremio-addon-sdk';
 import addonBuilder from 'stremio-addon-sdk/src/builder';
 import landingTemplate from 'stremio-addon-sdk/src/landingTemplate';
 import { catalog, manifest } from './manifest';
@@ -36,6 +36,7 @@ builder.defineCatalogHandler(async ({ extra: { search } }) => {
         description: `Provides search results from Easynews for '${search}'`,
       },
     ],
+    cacheMaxAge: 3600 * 24 * 30, // The returned data is static so it may be cached for a long time (30 days).
   };
 });
 
@@ -89,6 +90,7 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
         description: `Provides search results from Easynews for '${search}'`,
         videos,
       },
+      ...getCacheOptions(videos.length),
     };
   } catch (error) {
     logError({
@@ -134,7 +136,7 @@ builder.defineStreamHandler(async ({ id, type, config }) => {
       );
     }
 
-    return { streams };
+    return { streams, ...getCacheOptions(streams.length) };
   } catch (error) {
     logError({
       message: 'failed to handle stream',
@@ -176,6 +178,21 @@ function mapStream({
         },
       },
     } as Stream['behaviorHints'],
+  };
+}
+
+function getCacheOptions(itemsLength: number): Partial<Cache> {
+  if (itemsLength === 0) {
+    return {};
+  }
+
+  const oneDay = 3600 * 24;
+  const oneWeek = oneDay * 7;
+
+  return {
+    cacheMaxAge: oneWeek,
+    staleError: oneDay,
+    staleRevalidate: oneDay,
   };
 }
 
