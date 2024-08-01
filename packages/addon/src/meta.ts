@@ -15,7 +15,7 @@ export async function imdbMetaProvider(
   return fetch(`https://v2.sg.media-imdb.com/suggestion/t/${tt}.json`)
     .then((res) => res.json())
     .then((json) => {
-      return json.d.pop();
+      return json.d.find((item: { id: string }) => item.id === tt);
     })
     .then(({ l, y }) => ({ name: l, year: y, season, episode }));
 }
