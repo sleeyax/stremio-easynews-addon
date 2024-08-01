@@ -1,8 +1,18 @@
-# stremio-easynews-addon
+# stremio-easynews-addon (Easynews+)
 
 Provides content from Easynews & includes a search catalog. This addon can also be [self-hosted](#self-hosting).
 
 Public instance: [b89262c192b0-stremio-easynews-addon.baby-beamup.club](https://b89262c192b0-stremio-easynews-addon.baby-beamup.club/).
+
+## FAQ
+
+### What is Easynews?
+
+Easynews is a premium Usenet provider that offers a web-based Usenet browser. It allows you to search, preview, and download files from Usenet newsgroups without the need for a newsreader. Easynews is known for its user-friendly interface and fast download speeds. The Easynews addon for Stremio provides access to Easynews content directly within the Stremio app. You can search for and stream movies, TV shows, and other media files from Easynews using the addon. In a way it can serve as an alternative to debrid services (Real-Debrid, Premiumize, AllDebrid etc.). An Easynews account with an active subscription is required to use the addon.
+
+### Why not extend the existing Easynews addon?
+
+The original Easynews addon for Stremio is lacking features, contains bug and its developer is inactive to say the least (I did everything in my power to reach out to them, but they haven't responded since July 8 2024). It doesn't help that the original addon is closed-source too, which makes it difficult to contribute to the project. This addon aims to provide a better alternative by offering more features, better performance, and an open-source codebase that anyone can contribute to.
 
 ## Self-hosting
 
