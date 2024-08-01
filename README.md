@@ -91,3 +91,7 @@ To deploy the addon to beamup, run:
 ```bash
 $ npm run deploy:beamup
 ```
+
+## License
+
+[MIT](./LICENSE)
