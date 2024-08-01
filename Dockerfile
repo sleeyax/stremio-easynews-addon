@@ -18,8 +18,12 @@ COPY tsconfig.*json ./
 COPY packages/api ./packages/api
 COPY packages/addon ./packages/addon
 
-# Build the project & remove development dependencies afterwards.
-RUN npm run build -w packages/addon && npm --workspaces prune --omit=dev
+# Build the project.
+RUN npm run build -w packages/api 
+RUN npm run build -w packages/addon
+
+# Remove development dependencies.
+RUN npm --workspaces prune --omit=dev
 
 FROM node:22-alpine AS final
 
