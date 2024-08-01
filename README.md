@@ -10,7 +10,7 @@ To get results in a fast and private manner, you may wish to self-host the addon
 
 ### Cloudflare workers
 
-The addon can be deployed as a [Cloudflare workers](https://workers.cloudflare.com/), which is a serverless platform that runs your code in data centers around the world. It's incredibly fast and reliable, and you can deploy the addon for free.
+The addon can be deployed as a [Cloudflare worker](https://workers.cloudflare.com/), which is a serverless platform that runs your code in data centers around the world. It's incredibly fast and reliable, and you can deploy the addon for free.
 
 Follow the [getting started guide](https://developers.cloudflare.com/workers/get-started/guide/) and then deploy the addon with the [wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/):
 
