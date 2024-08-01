@@ -57,6 +57,8 @@ Navigate to `http://localhost:1337/` in your browser to verify that the addon is
 $ PORT=8080 npm run start:addon
 ```
 
+---
+
 Looking for additional hosting options? Let us know which platform(s) you'd like to see supported by [creating an issue](https://github.com/sleeyax/stremio-easynews-addon/issues/new).
 
 ## Contribute
