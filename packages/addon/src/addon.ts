@@ -12,13 +12,8 @@ import {
   getPostTitle,
   getSize,
   isBadVideo,
-  sanitizeTitle,
 } from './utils';
-import {
-  EasynewsAPI,
-  EasynewsSearchResponse,
-  createBasic,
-} from '@easynews/api';
+import { EasynewsAPI, createBasic } from '@easynews/api';
 import { publicMetaProvider } from './meta';
 import { Config } from './stremio-addon-sdk';
 
@@ -44,91 +39,101 @@ builder.defineCatalogHandler(async ({ extra: { search } }) => {
 });
 
 builder.defineMetaHandler(async ({ id, config }) => {
-  if (!id.startsWith(catalog.id)) {
-    return { meta: null as unknown as MetaDetail };
-  }
-
-  const search = id.replace(prefix, '');
-
-  const videos: MetaVideo[] = [];
-
-  const api = new EasynewsAPI(config);
-  const res = await api.searchAll(search);
-
-  for (const file of res?.data ?? []) {
-    if (isBadVideo(file)) {
-      continue;
+  try {
+    if (!id.startsWith(catalog.id)) {
+      return { meta: null as unknown as MetaDetail };
     }
 
-    const title = getPostTitle(file);
+    const search = id.replace(prefix, '');
 
-    videos.push({
-      id: `${prefix}${file.sig}`,
-      released: new Date(file['5']).toISOString(),
-      title,
-      overview: file['6'],
-      thumbnail: createThumbnailUrl(res, file),
-      streams: [
-        mapStream({
-          config,
-          title,
-          duration: getDuration(file),
-          size: getSize(file),
-          url: `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(config)}`,
-        }),
-      ],
-    });
+    const videos: MetaVideo[] = [];
+
+    const api = new EasynewsAPI(config);
+    const res = await api.searchAll(search);
+
+    for (const file of res?.data ?? []) {
+      if (isBadVideo(file)) {
+        continue;
+      }
+
+      const title = getPostTitle(file);
+
+      videos.push({
+        id: `${prefix}${file.sig}`,
+        released: new Date(file['5']).toISOString(),
+        title,
+        overview: file['6'],
+        thumbnail: createThumbnailUrl(res, file),
+        streams: [
+          mapStream({
+            config,
+            title,
+            duration: getDuration(file),
+            size: getSize(file),
+            url: `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(config)}`,
+          }),
+        ],
+      });
+    }
+
+    return {
+      meta: {
+        id: `${prefix}${search}`,
+        name: search,
+        type: 'tv',
+        logo: manifest.logo,
+        background: manifest.background,
+        poster: manifest.logo,
+        posterShape: 'square',
+        description: `Provides search results from Easynews for '${search}'`,
+        videos,
+      },
+    };
+  } catch (error) {
+    console.error('failed to handle meta', error);
+    return { meta: null as unknown as MetaDetail };
   }
-
-  return {
-    meta: {
-      id: `${prefix}${search}`,
-      name: search,
-      type: 'tv',
-      logo: manifest.logo,
-      background: manifest.background,
-      poster: manifest.logo,
-      posterShape: 'square',
-      description: `Provides search results from Easynews for '${search}'`,
-      videos,
-    },
-  };
 });
 
 builder.defineStreamHandler(async ({ id, type, config }) => {
-  if (!id.startsWith('tt')) {
-    return { streams: [] };
-  }
-
-  const meta = await publicMetaProvider(id, type);
-  const searchQuery = buildSearchQuery(type, meta);
-
-  const api = new EasynewsAPI(config);
-  const res = await api.search(searchQuery);
-
-  if (!res || !res.data) {
-    return { streams: [] };
-  }
-
-  const streams: Stream[] = [];
-
-  for (const file of res.data ?? []) {
-    if (isBadVideo(file)) {
-      continue;
+  try {
+    if (!id.startsWith('tt')) {
+      return { streams: [] };
     }
 
-    streams.push(
-      mapStream({
-        config,
-        duration: getDuration(file),
-        size: getSize(file),
-        title: getPostTitle(file),
-        url: `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(config)}`,
-      })
-    );
-  }
+    const meta = await publicMetaProvider(id, type);
+    const searchQuery = buildSearchQuery(type, meta);
 
-  return { streams };
+    const api = new EasynewsAPI(config);
+    const res = await api.search(searchQuery);
+
+    if (!res || !res.data) {
+      return { streams: [] };
+    }
+
+    const streams: Stream[] = [];
+
+    for (const file of res.data ?? []) {
+      if (isBadVideo(file)) {
+        continue;
+      }
+
+      streams.push(
+        mapStream({
+          config,
+          duration: getDuration(file),
+          size: getSize(file),
+          title: getPostTitle(file),
+          url: `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(config)}`,
+        })
+      );
+    }
+
+    return { streams };
+  } catch (err) {
+    console.error('failed to handle stream', err);
+    return { streams: [] };
+  }
 });
 
 function mapStream({
