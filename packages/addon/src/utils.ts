@@ -1,5 +1,7 @@
 import { EasynewsSearchResponse, FileData } from '@easynews/api';
 import { type Config } from './stremio-addon-sdk';
+import { MetaProviderResponse } from './meta';
+import { ContentType } from 'stremio-addon-sdk';
 
 export function isBadVideo(file: FileData) {
   const duration = file['14'] ?? '';
@@ -67,4 +69,37 @@ export function createThumbnailUrl(
   const idChars = id.slice(0, 3);
   const thumbnailSlug = file['10'];
   return `${res.thumbURL}${idChars}/pr-${id}.jpg/th-${thumbnailSlug}.jpg`;
+}
+
+export function extractDigits(value: string) {
+  const match = value.match(/\d+/);
+
+  if (match) {
+    return parseInt(match[0], 10);
+  }
+
+  return undefined;
+}
+
+export function buildSearchQuery(
+  type: ContentType,
+  meta: MetaProviderResponse
+) {
+  let query = `${meta.name}`;
+
+  if (type === 'series') {
+    if (meta.season) {
+      query += ` S${meta.season.toString().padStart(2, '0')}`;
+    }
+
+    if (meta.episode) {
+      query += `E${meta.episode.toString().padStart(2, '0')}`;
+    }
+  }
+
+  if (meta.year) {
+    query += ` ${meta.year}`;
+  }
+
+  return query;
 }

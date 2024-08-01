@@ -3,6 +3,7 @@ import addonBuilder from 'stremio-addon-sdk/src/builder';
 import landingTemplate from 'stremio-addon-sdk/src/landingTemplate';
 import { catalog, manifest } from './manifest';
 import {
+  buildSearchQuery,
   createStreamAuth,
   createStreamPath,
   createStreamUrl,
@@ -14,6 +15,7 @@ import {
   sanitizeTitle,
 } from './utils';
 import { EasynewsAPI, createBasic } from '@easynews/api';
+import { publicMetaProvider } from './meta';
 
 const builder = new addonBuilder(manifest);
 
@@ -80,6 +82,7 @@ builder.defineMetaHandler(async ({ id, config }) => {
             notWebReady: true,
             proxyHeaders: {
               request: {
+                'User-Agent': 'Stremio',
                 Authorization: createBasic(config.username, config.password),
               },
             },
@@ -104,15 +107,16 @@ builder.defineMetaHandler(async ({ id, config }) => {
   };
 });
 
-builder.defineStreamHandler(async ({ id, config }) => {
+builder.defineStreamHandler(async ({ id, type, config }) => {
   if (!id.startsWith('tt')) {
     return { streams: [] };
   }
 
-  const search = id;
+  const meta = await publicMetaProvider(id, type);
+  const searchQuery = buildSearchQuery(type, meta);
 
   const api = new EasynewsAPI(config);
-  const results = await api.search(search);
+  const results = await api.search(searchQuery);
 
   if (!results || !results.data) {
     return { streams: [] };
@@ -126,24 +130,28 @@ builder.defineStreamHandler(async ({ id, config }) => {
     }
 
     const postTitle = getPostTitle(file);
-
-    const sanitizedTitle = sanitizeTitle(postTitle);
-    if (!sanitizedTitle.toLowerCase().includes(search.toLowerCase())) {
-      continue;
-    }
-
     const size = getSize(file);
     const duration = getDuration(file);
-
     const fileDl = `${createStreamUrl(results)}/${createStreamPath(file)}|${createStreamAuth(config)}`;
 
     streams.push({
-      name: sanitizedTitle,
-      description: `${postTitle} (${duration}) - ${size}MB`,
+      name: 'Easynews+',
+      title: postTitle,
+      description: [
+        postTitle,
+        `🕛 ${duration ?? 'unknown duration'}`,
+        `📦 ${size ?? 'unknown size'}`,
+      ].join('\n'),
       url: fileDl,
       behaviorHints: {
-        notWebReady: sanitizedTitle.includes('HDR'),
-      },
+        notWebReady: true,
+        proxyHeaders: {
+          request: {
+            'User-Agent': 'Stremio',
+            Authorization: createBasic(config.username, config.password),
+          },
+        },
+      } as Stream['behaviorHints'],
     });
   }
 
