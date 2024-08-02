@@ -1,5 +1,7 @@
-// Generated using: https://app.quicktype.io/.
-
+/**
+ * Generated using: https://app.quicktype.io/.
+ *
+ */
 export type EasynewsSearchResponse = {
   sid: string;
   results: number;
@@ -140,4 +142,18 @@ export type Fields = {
 export type GsColumn = {
   num: number;
   name: string;
+};
+
+export type SortDirection = '+' | '-';
+
+export type SearchOptions = {
+  query: string;
+  pageNr?: number;
+  maxResults?: number;
+  sort1?: string;
+  sort1Direction?: SortDirection;
+  sort2?: string;
+  sort2Direction?: SortDirection;
+  sort3?: string;
+  sort3Direction?: SortDirection;
 };

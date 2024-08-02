@@ -1,5 +1,4 @@
 import { EasynewsSearchResponse, FileData } from '@easynews/api';
-import { type Config } from './stremio-addon-sdk';
 import { MetaProviderResponse } from './meta';
 import { ContentType } from 'stremio-addon-sdk';
 import { parse as parseTorrentTitle } from 'parse-torrent-title';
@@ -46,8 +45,8 @@ export function createStreamPath(file: FileData) {
   return `${postHash}${ext}/${postTitle}${ext}`;
 }
 
-export function createStreamAuth(config: Config) {
-  return `Authorization=${encodeURIComponent(config.username + ':' + config.password)}`;
+export function createStreamAuth(username: string, password: string) {
+  return `Authorization=${encodeURIComponent(username + ':' + password)}`;
 }
 
 export function getFileExtension(file: FileData) {
@@ -123,4 +122,9 @@ export function logError(message: {
   context: unknown;
 }) {
   console.error(message);
+}
+
+export function capitalizeFirstLetter(str: string): string {
+  if (!str) return str;
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }

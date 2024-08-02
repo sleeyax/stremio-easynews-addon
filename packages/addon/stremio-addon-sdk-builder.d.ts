@@ -10,6 +10,17 @@ declare module 'stremio-addon-sdk/src/builder' {
     Subtitle,
   } from 'stremio-addon-sdk';
 
+  type Config = {
+    username: string;
+    password: string;
+    sort1?: string;
+    sort1Direction?: string;
+    sort2?: string;
+    sort2Direction?: string;
+    sort3?: string;
+    sort3Direction?: string;
+  };
+
   export default class addonBuilder {
     constructor(manifest: Manifest);
 
