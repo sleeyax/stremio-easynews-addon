@@ -88,4 +88,20 @@ export class EasynewsAPI {
 
     return res;
   }
+
+  /**
+   * Get the `Location` header from the response.
+   * @param url The URL to fetch.
+   * @returns The `Location` header value or `null` if it doesn't exist.
+   */
+  async resolveRedirectLocation(url: string): Promise<string | null> {
+    const res = await fetch(url, {
+      method: 'HEAD',
+      redirect: 'manual',
+      headers: this.headers,
+      keepalive: false,
+      signal: AbortSignal.timeout(30_000), // 30 seconds
+    });
+    return res.headers.get('Location');
+  }
 }

@@ -4,7 +4,6 @@ import landingTemplate from 'stremio-addon-sdk/src/landingTemplate';
 import { catalog, manifest } from './manifest';
 import {
   buildSearchQuery,
-  createStreamAuth,
   createStreamPath,
   createStreamUrl,
   createThumbnailUrl,
@@ -56,12 +55,34 @@ builder.defineMetaHandler(
       const api = new EasynewsAPI({ username, password });
       const res = await api.searchAll({ query: search });
 
-      for (const file of res?.data ?? []) {
+      if (!res || !Array.isArray(res.data)) {
+        return { meta: null as unknown as MetaDetail };
+      }
+
+      // Fetch all public video URLs in parallel.
+      // This might take a while depending on the number of items.
+      const urls = await Promise.all(
+        res.data.map((file) =>
+          api.resolveRedirectLocation(
+            `${createStreamUrl(res)}/${createStreamPath(file)}`
+          )
+        )
+      );
+
+      for (let i = 0; i < res.data.length; i++) {
+        const file = res.data[i];
+
         if (isBadVideo(file)) {
           continue;
         }
 
         const title = getPostTitle(file);
+
+        const url = urls[i];
+
+        if (!url) {
+          continue;
+        }
 
         videos.push({
           id: `${prefix}${file.sig}`,
@@ -78,7 +99,7 @@ builder.defineMetaHandler(
               fileExtension: getFileExtension(file),
               duration: getDuration(file),
               size: getSize(file),
-              url: `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(username, password)}`,
+              url,
               videoSize: file.rawSize,
             }),
           ],
@@ -145,14 +166,30 @@ builder.defineStreamHandler(
         });
       }
 
-      if (!res || !res.data) {
+      if (!res || !Array.isArray(res.data)) {
         return { streams: [] };
       }
 
       const streams: Stream[] = [];
 
-      for (const file of res.data ?? []) {
+      const urls = await Promise.all(
+        res.data.map((file) =>
+          api.resolveRedirectLocation(
+            `${createStreamUrl(res)}/${createStreamPath(file)}`
+          )
+        )
+      );
+
+      for (let i = 0; i < res.data.length; i++) {
+        const file = res.data[i];
+
         if (isBadVideo(file)) {
+          continue;
+        }
+
+        const url = urls[i];
+
+        if (!url) {
           continue;
         }
 
@@ -165,7 +202,7 @@ builder.defineStreamHandler(
             duration: getDuration(file),
             size: getSize(file),
             title: getPostTitle(file),
-            url: `${createStreamUrl(res)}/${createStreamPath(file)}`,
+            url,
             videoSize: file.rawSize,
           })
         );
@@ -215,13 +252,6 @@ function mapStream({
     ].join('\n'),
     url: url,
     behaviorHints: {
-      notWebReady: true,
-      proxyHeaders: {
-        request: {
-          'User-Agent': 'Stremio',
-          Authorization: createBasic(username, password),
-        },
-      },
       fileName: title,
       videoSize,
     } as Stream['behaviorHints'],
