@@ -109,10 +109,16 @@ builder.defineStreamHandler(async ({ id, type, config }) => {
     }
 
     const meta = await publicMetaProvider(id, type);
-    const searchQuery = buildSearchQuery(type, meta);
 
     const api = new EasynewsAPI(config);
-    const res = await api.search(searchQuery);
+
+    let res = await api.search(
+      buildSearchQuery(type, { ...meta, year: undefined })
+    );
+
+    if (res?.data?.length <= 1 && meta.year !== undefined) {
+      res = await api.search(buildSearchQuery(type, meta));
+    }
 
     if (!res || !res.data) {
       return { streams: [] };
