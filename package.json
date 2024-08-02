@@ -11,7 +11,8 @@
     "start:addon:dev": "npm -w packages/addon run start:dev",
     "start:cloudflare-worker:dev": "npm -w packages/cloudflare-worker run dev",
     "deploy:beamup": "beamup",
-    "deploy:cloudflare-worker": "npm -w packages/cloudflare-worker run deploy"
+    "deploy:cloudflare-worker": "npm -w packages/cloudflare-worker run deploy",
+    "version": "npm version $npm_package_version --workspaces && git add **/package.json"
   },
   "keywords": [
     "stremio easynews addon",
