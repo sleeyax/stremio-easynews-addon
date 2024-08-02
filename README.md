@@ -108,6 +108,15 @@ To deploy the addon to beamup, run:
 $ npm run deploy:beamup
 ```
 
+To release a new version of the addon:
+
+```bash
+$ npm version <major|minor|patch>
+$ git push --follow-tags
+```
+
+Finally, create a new release targeting the tag you just pushed on GitHub and include some release notes.
+
 ## License
 
 [MIT](./LICENSE)
