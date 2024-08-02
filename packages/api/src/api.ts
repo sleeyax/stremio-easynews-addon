@@ -1,5 +1,5 @@
 import { createBasic } from './utils';
-import { EasynewsSearchResponse, FileData } from './types';
+import { EasynewsSearchResponse, FileData, SearchOptions } from './types';
 
 export class EasynewsAPI {
   private readonly baseUrl = 'https://members.easynews.com';
@@ -15,7 +15,17 @@ export class EasynewsAPI {
     this.headers.append('Authorization', basic);
   }
 
-  async search(query: string, pageNr = 1, maxResults = 1000) {
+  async search({
+    query,
+    pageNr = 1,
+    maxResults = 1000,
+    sort1 = 'dsize',
+    sort1Direction = '-',
+    sort2 = 'relevance',
+    sort2Direction = '-',
+    sort3 = 'dtime',
+    sort3Direction = '-',
+  }: SearchOptions): Promise<EasynewsSearchResponse> {
     const searchParams = {
       st: 'adv',
       sb: '1',
@@ -26,12 +36,12 @@ export class EasynewsAPI {
       gx: '1',
       pno: pageNr.toString(),
       sS: '3',
-      s1: 'relevance',
-      s1d: '-',
-      s2: 'dsize',
-      s2d: '-',
-      s3: 'dtime',
-      s3d: '-',
+      s1: sort1,
+      s1d: sort1Direction,
+      s2: sort2,
+      s2d: sort2Direction,
+      s3: sort3,
+      s3d: sort3Direction,
       pby: maxResults.toString(),
       safeO: '0',
       gps: query,
@@ -53,16 +63,16 @@ export class EasynewsAPI {
 
     const json = await res.json();
 
-    return json as EasynewsSearchResponse;
+    return json;
   }
 
-  async searchAll(query: string): Promise<EasynewsSearchResponse> {
+  async searchAll(options: SearchOptions): Promise<EasynewsSearchResponse> {
     const data: FileData[] = [];
     let res: EasynewsSearchResponse;
     let pageNr = 1;
 
     while (true) {
-      res = await this.search(query, pageNr);
+      res = await this.search({ ...options, pageNr: 1 });
 
       // No more results.
       if (res.data.length === 0) {
