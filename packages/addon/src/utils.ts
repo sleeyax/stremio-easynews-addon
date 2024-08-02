@@ -2,6 +2,7 @@ import { EasynewsSearchResponse, FileData } from '@easynews/api';
 import { type Config } from './stremio-addon-sdk';
 import { MetaProviderResponse } from './meta';
 import { ContentType } from 'stremio-addon-sdk';
+import { parse as parseTorrentTitle } from 'parse-torrent-title';
 
 export function isBadVideo(file: FileData) {
   const duration = file['14'] ?? '';
@@ -63,6 +64,14 @@ export function getDuration(file: FileData) {
 
 export function getSize(file: FileData) {
   return file['4'] ?? '';
+}
+
+export function getQuality(
+  title: string,
+  fallbackResolution?: string
+): string | undefined {
+  const { resolution } = parseTorrentTitle(title);
+  return resolution ?? fallbackResolution;
 }
 
 export function createThumbnailUrl(

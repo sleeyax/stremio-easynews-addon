@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@easynews/api": "^1.0.0",
+    "parse-torrent-title": "^1.4.0",
     "stremio-addon-sdk": "^1.6.10"
   }
 }

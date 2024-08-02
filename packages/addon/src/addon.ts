@@ -10,6 +10,7 @@ import {
   createThumbnailUrl,
   getDuration,
   getPostTitle,
+  getQuality,
   getSize,
   isBadVideo,
   logError,
@@ -70,6 +71,7 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
           mapStream({
             config,
             title,
+            fullResolution: file.fullres,
             duration: getDuration(file),
             size: getSize(file),
             url: `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(config)}`,
@@ -134,6 +136,7 @@ builder.defineStreamHandler(async ({ id, type, config }) => {
       streams.push(
         mapStream({
           config,
+          fullResolution: file.fullres,
           duration: getDuration(file),
           size: getSize(file),
           title: getPostTitle(file),
@@ -157,17 +160,21 @@ function mapStream({
   config,
   duration,
   size,
+  fullResolution,
   title,
   url,
 }: {
   title: string;
   duration: string | undefined;
   size: string | undefined;
+  fullResolution: string | undefined;
   url: string;
   config: Config;
 }): Stream {
+  const quality = getQuality(title, fullResolution);
+
   return {
-    name: 'Easynews+',
+    name: `Easynews+${quality ? `\n${quality}` : ''}`,
     title: title,
     description: [
       title,
