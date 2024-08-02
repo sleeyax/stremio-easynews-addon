@@ -72,10 +72,10 @@ export class EasynewsAPI {
     let pageNr = 1;
 
     while (true) {
-      res = await this.search({ ...options, pageNr: 1 });
+      res = await this.search({ ...options, pageNr });
 
       // No more results.
-      if (res.data.length === 0) {
+      if (res.data.length === 0 || data[0]?.['0'] === res.data[0]?.['0']) {
         break;
       }
 

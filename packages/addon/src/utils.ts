@@ -54,7 +54,7 @@ export function getFileExtension(file: FileData) {
 }
 
 export function getPostTitle(file: FileData) {
-  return `${file['10'] ?? ''}${getFileExtension(file)}`;
+  return file['10'] ?? '';
 }
 
 export function getDuration(file: FileData) {
