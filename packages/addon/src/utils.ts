@@ -49,8 +49,12 @@ export function createStreamAuth(config: Config) {
   return `Authorization=${encodeURIComponent(config.username + ':' + config.password)}`;
 }
 
+export function getFileExtension(file: FileData) {
+  return file['2'] ?? '';
+}
+
 export function getPostTitle(file: FileData) {
-  return file['10'] ?? '';
+  return `${file['10'] ?? ''}${getFileExtension(file)}`;
 }
 
 export function getDuration(file: FileData) {
