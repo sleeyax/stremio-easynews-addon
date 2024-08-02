@@ -9,6 +9,7 @@ import {
   createStreamUrl,
   createThumbnailUrl,
   getDuration,
+  getFileExtension,
   getPostTitle,
   getQuality,
   getSize,
@@ -27,7 +28,7 @@ builder.defineCatalogHandler(async ({ extra: { search } }) => {
   return {
     metas: [
       {
-        id: `${prefix}${search}`,
+        id: `${prefix}${encodeURIComponent(search)}`,
         name: search,
         type: 'tv',
         logo: manifest.logo,
@@ -48,7 +49,7 @@ builder.defineMetaHandler(
         return { meta: null as unknown as MetaDetail };
       }
 
-      const search = id.replace(prefix, '');
+      const search = decodeURIComponent(id.replace(prefix, ''));
 
       const videos: MetaVideo[] = [];
 
@@ -74,9 +75,11 @@ builder.defineMetaHandler(
               password,
               title,
               fullResolution: file.fullres,
+              fileExtension: getFileExtension(file),
               duration: getDuration(file),
               size: getSize(file),
               url: `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(username, password)}`,
+              videoSize: file.rawSize,
             }),
           ],
         });
@@ -84,7 +87,7 @@ builder.defineMetaHandler(
 
       return {
         meta: {
-          id: `${prefix}${search}`,
+          id,
           name: search,
           type: 'tv',
           logo: manifest.logo,
@@ -158,10 +161,12 @@ builder.defineStreamHandler(
             username,
             password,
             fullResolution: file.fullres,
+            fileExtension: getFileExtension(file),
             duration: getDuration(file),
             size: getSize(file),
             title: getPostTitle(file),
-            url: `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(username, password)}`,
+            url: `${createStreamUrl(res)}/${createStreamPath(file)}`,
+            videoSize: file.rawSize,
           })
         );
       }
@@ -185,12 +190,16 @@ function mapStream({
   size,
   fullResolution,
   title,
+  fileExtension,
+  videoSize,
   url,
 }: {
   title: string;
   url: string;
   username: string;
   password: string;
+  fileExtension: string;
+  videoSize: number | undefined;
   duration: string | undefined;
   size: string | undefined;
   fullResolution: string | undefined;
@@ -199,9 +208,8 @@ function mapStream({
 
   return {
     name: `Easynews+${quality ? `\n${quality}` : ''}`,
-    title: title,
     description: [
-      title,
+      `${title}${fileExtension}`,
       `🕛 ${duration ?? 'unknown duration'}`,
       `📦 ${size ?? 'unknown size'}`,
     ].join('\n'),
@@ -214,6 +222,8 @@ function mapStream({
           Authorization: createBasic(username, password),
         },
       },
+      fileName: title,
+      videoSize,
     } as Stream['behaviorHints'],
   };
 }
