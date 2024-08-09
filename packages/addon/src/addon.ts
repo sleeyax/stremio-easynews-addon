@@ -15,6 +15,7 @@ import {
   getSize,
   isBadVideo,
   logError,
+  matchesTitle,
 } from './utils';
 import { EasynewsAPI, SearchOptions, createBasic } from '@easynews/api';
 import { publicMetaProvider } from './meta';
@@ -57,11 +58,11 @@ builder.defineMetaHandler(
       const res = await api.searchAll({ query: search });
 
       for (const file of res?.data ?? []) {
-        if (isBadVideo(file)) {
+        const title = getPostTitle(file);
+
+        if (isBadVideo(file) || !matchesTitle(title, search, false)) {
           continue;
         }
-
-        const title = getPostTitle(file);
 
         videos.push({
           id: `${prefix}${file.sig}`,
@@ -133,15 +134,17 @@ builder.defineStreamHandler(
 
       const api = new EasynewsAPI({ username, password });
 
+      let query = buildSearchQuery(type, { ...meta, year: undefined });
       let res = await api.search({
         ...sortOptions,
-        query: buildSearchQuery(type, { ...meta, year: undefined }),
+        query,
       });
 
       if (res?.data?.length <= 1 && meta.year !== undefined) {
+        query = buildSearchQuery(type, meta);
         res = await api.search({
           ...sortOptions,
-          query: buildSearchQuery(type, meta),
+          query,
         });
       }
 
@@ -152,7 +155,30 @@ builder.defineStreamHandler(
       const streams: Stream[] = [];
 
       for (const file of res.data ?? []) {
+        const title = getPostTitle(file);
+
         if (isBadVideo(file)) {
+          continue;
+        }
+
+        // For series there are multiple possible queries that could match the title.
+        // We check if at least one of them matches.
+        if (type === 'series') {
+          const queries = [
+            // full query with season and episode (and optionally year)
+            query,
+            // query with episode only
+            buildSearchQuery(type, { name: meta.name, episode: meta.episode }),
+          ];
+
+          if (!queries.some((query) => matchesTitle(title, query, false))) {
+            continue;
+          }
+        }
+
+        // Movie titles should match the query strictly.
+        // Other content types are loosely matched.
+        if (!matchesTitle(title, query, type === 'movie')) {
           continue;
         }
 
@@ -164,7 +190,7 @@ builder.defineStreamHandler(
             fileExtension: getFileExtension(file),
             duration: getDuration(file),
             size: getSize(file),
-            title: getPostTitle(file),
+            title,
             url: `${createStreamUrl(res)}/${createStreamPath(file)}`,
             videoSize: file.rawSize,
           })
