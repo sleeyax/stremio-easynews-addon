@@ -22,11 +22,30 @@ export function isBadVideo(file: FileData) {
 export function sanitizeTitle(title: string) {
   return (
     title
+      // replace common separators with spaces
+      .replaceAll('-', ' ')
+      .replaceAll('_', ' ')
+      .replaceAll('.', ' ')
       // remove non-alphanumeric characters
       .replace(/[^\w\s]/g, '')
       // remove spaces at the beginning and end
       .trim()
   );
+}
+
+export function matchesTitle(title: string, query: string, strict: boolean) {
+  const sanitizedQuery = query.toLowerCase().trim();
+
+  if (strict) {
+    const { title: movieTitle } = parseTorrentTitle(title);
+    if (movieTitle) {
+      return movieTitle.toLowerCase().trim() === sanitizedQuery;
+    }
+  }
+
+  const sanitizedTitle = sanitizeTitle(title).toLowerCase().trim();
+  const re = new RegExp(`\\b${sanitizedQuery}\\b`, 'i'); // match the whole word; e.g. query "deadpool 2" shouldn't match "deadpool 2016"
+  return re.test(sanitizedTitle);
 }
 
 export function createStreamUrl({
@@ -105,7 +124,7 @@ export function buildSearchQuery(
     }
 
     if (meta.episode) {
-      query += `E${meta.episode.toString().padStart(2, '0')}`;
+      query += `${!meta.season ? ' ' : ''}E${meta.episode.toString().padStart(2, '0')}`;
     }
   }
 
