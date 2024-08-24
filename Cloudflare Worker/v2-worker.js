@@ -53,7 +53,7 @@ async function handleRequest(request) {
 
 function handleLoginPage() {
   const html = `
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -62,9 +62,9 @@ function handleLoginPage() {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #e3f2fd; /* Light blue background */
-            color: #0d47a1; /* Dark blue text color */
-            text-align: center; /* Center-align text */
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            text-align: center;
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
@@ -75,33 +75,32 @@ function handleLoginPage() {
         }
         h1 {
             font-size: 24px;
-            color: #0d47a1; /* Match text color to logo color */
+            color: #0d47a1;
             margin-bottom: 20px;
         }
         input[type="text"], input[type="password"] {
             display: block;
-            width: calc(100% - 22px); /* Adjust width to account for padding */
+            width: calc(100% - 22px);
             margin: 10px auto;
-            padding: 10px; /* Adjust padding */
+            padding: 10px;
             border-radius: 5px;
-            border: 1px solid #90caf9; /* Light blue border to match the background */
+            border: 1px solid #90caf9;
             font-size: 16px;
         }
         button {
-          background-color: #0d47a1; /* Dark blue background */
-          color: white;
-          border: none;
-          cursor: pointer;
-          padding: 12px 24px; /* Increase padding for larger button */
-          font-size: 16px; /* Increase font size for better readability */
-          margin: 10px auto;
-          display: block;
-          width: 200px; /* Set width to double the normal size */
-          border-radius: 5px;
-      }
-    
+            background-color: #0d47a1;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 12px 24px;
+            font-size: 16px;
+            margin: 10px auto;
+            display: block;
+            width: 200px;
+            border-radius: 5px;
+        }
         button:hover {
-            background-color: #1565c0; /* Slightly lighter blue for hover effect */
+            background-color: #1565c0;
         }
         .error {
             color: red;
@@ -110,20 +109,30 @@ function handleLoginPage() {
     </style>
 </head>
 <body>
-    <!-- Using a placeholder image URL; replace with your actual image URL -->
     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHhtbG5zOnhsaW5rPSdodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rJyBzdHlsZT0naXNvbGF0aW9uOmlzb2xhdGUnIHZpZXdCb3g9JzAgMCA5MDAgMTcwJyB3aWR0aD0nMjQ0JyBoZWlnaHQ9JzQ2Jz48ZyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgwIDE4LjI0MyknIGZpbGw9J3VybCgjbGluZWFyR3JhZGllbnQ0OTQ4KSc+PHBhdGggZD0nTTc2MC42MDEgODcuNTNoODQuNTUycS45MjctLjMwNCAxLjg1My0zLjA0NC45MjctMi43NDEuOTI3LTQuMjYzIDAtMS44MjctLjkyNy00LjU2Ny0uOTI2LTMuMDQ0LTEuMzktMy4wNDRoLTY4LjU2N3EwLTkuMTM0IDIuMzE2LTE3LjY1OSAyLjMxNi04LjUyNSA2LjQ4Ni0xNC45MTkgNC40MDEtNi42OTggMTAuMTkzLTEwLjY1NiA2LjAyMy0zLjk1OCAxMy40MzUtMy45NThoNTYuNTIydjE2Ljc0NWgtNTYuNTIybC0yLjA4NSAyLjc0MXEtMS44NTMgMi40MzUtMy4yNDMgNC44NzEtLjY5NSAxLjUyMi0xLjE1OCAyLjQzNi0uMjMxLjkxMy0uMjMxIDIuMTMxIDAgLjYwOS45MjYgMy4wNDRoNTcuNjgxcTIuNTQ4IDAgNC44NjQgMi40MzYgMi4zMTcgMi40MzYgMy43MDcgNi4wODkgMS42MjEgMy42NTQgMi41NDggNy42MTIuOTI2IDMuOTU4LjkyNiA2LjY5OCAwIDQuMjYzLTEuMzkgOC41MjUtMS4xNTggNC4yNjItMy40NzQgNy45MTYtMi4wODUgMy4zNDktNS4wOTcgNS43ODUtMy4wMTEgMi4xMzEtNi40ODYgMi4xMzFoLTk2LjM2NXonLz48cGF0aCBkPSdNNzY3LjEyNiAyNS40MnY2Mi43MTlxLS45MjcgMy4wNDUtMy4wMTIgNi4wODktMS44NTMgMi43NC00LjQwMSA1LjE3Ni0yLjMxNyAyLjEzMS01LjA5NiAzLjY1NC0yLjU0OSAxLjUyMi00LjYzMyAxLjUyMmgtMzEuNzM2VjkyLjQwMXEtNS4zMjggNi4wOS05LjAzNCA5LjEzNC0zLjcwNyAzLjA0NS02Ljk1IDMuMDQ1aC00OS4xMDlWMjUuNDJoMTkuNDU4djYwLjU4OGgxOC43NjRxNC44NjQtMS41MjIgNi43MTctMy42NTQgMS44NTQtMi4xMzEgMi43OC02LjM5M1YyNS40MmgxOC41MzJ2NjAuNTg4aDE5LjY5cTQuODY1LTEuNTIyIDYuNzE4LTMuNjU0IDEuODUzLTIuMTMxIDIuNzgtNi4zOTNWMjUuNDJ6TTU2MC4zNyA2Ni44MjdoLTEzLjQzNXEuNDYzLTMuOTU4IDIuMDg1LTguNTI1IDEuNjIxLTQuODcyIDYuMjU0LTEyLjE3OSAyLjA4NS0zLjM0OSA1LjA5Ni03LjAwMiAzLjAxMi0zLjY1NCA2Ljk1LTYuMzk0IDMuOTM4LTMuMDQ1IDguMzM5LTQuODcxIDQuNDAyLTIuMTMyIDguODAzLTIuNDM2aDU3LjIxN3YxNi43NDVoLTUzLjk3NHEtMS4zOS42MDktMi43OCAxLjUyMy0xLjM5LjkxMy0zLjQ3NSAzLjY1My0yLjA4NCAyLjc0LTMuMDExIDQuODcyLS45MjcgMi4xMzEtMS4zOSA1LjE3NWg1Ny42ODF2MTUuMjI0aC00Ny45NTJxLTIuNTQ4IDAtNS4wOTYgNC41NjYtMi41NDggNC4yNjMtMy45MzggMTAuNjU3aDY2LjAydjE2Ljc0NWgtOTYuODI5cTAtMy45NTggMS4xNTgtOC44MjkgMS4zOS00Ljg3MiAzLjcwNi05Ljc0MyAyLjMxNy01LjE3NiA1LjMyOC0xMC4wNDcgMy4wMTItNS4xNzYgNi4yNTUtOS4xMzR6TTUzOC42ODggMTA0LjU4VjQxLjg2MXEtLjkyNy0zLjA0NS0zLjAxMi02LjA4OS0yLjA4NC0zLjA0NS00LjYzMy01LjE3Ni0yLjMxNi0yLjQzNi00Ljg2NC0zLjY1NC0yLjU0OC0xLjUyMi00LjYzMy0xLjUyMmgtNzUuNTE4djc5LjE2aDE5LjQ1OVY0My45OTJoNDUuMTcxcTQuODY1IDEuNTIyIDYuNzE4IDMuNjU0IDEuODUzIDIuMTMxIDIuNzggNi4zOTN2NTAuNTQxek00MzYuMzIxIDEwNC41OGgtOTAuMzQzVjg3LjgzNWg3MS4xMTZWMjUuNDJoMTkuMjI3em0tNzkuMjI0LTQxLjQwN3EtMy4yNDMtMy45NTgtNi4yNTQtOC44MjktMi43OC00Ljg3Mi01LjA5Ny0xMC4wNDctMi4zMTYtNS4xNzYtMy43MDYtMTAuMDQ4LTEuMzktNC44NzEtMS4zOS04LjgyOWgyMi45MzNxMi41NDggOC41MjUgNC4xNyAxMy43MDEgMS42MjIgNC44NzEgMi41NDggNi4zOTMgMS4xNTggMS41MjMgMi4zMTcgMy42NTQgMS4xNTggMS44MjcgMi4zMTYgMy45NTggMS4zOSAxLjgyNyAyLjc4IDMuMDQ1IDEuMzkgMS4yMTcgMi43OCAxLjIxN2gyNi44NzF2MTUuMjI0aC0zNy4wNjRxLTguODAyLTMuNjU0LTEzLjIwNC05LjQzOXpNMjE5LjAzMyA4Ny41M2g4NC41NTJxLjkyNi0uMzA0IDEuODUzLTMuMDQ0LjkyNi0yLjc0MS45MjYtNC4yNjMgMC0xLjgyNy0uOTI2LTQuNTY3LS45MjctMy4wNDQtMS4zOS0zLjA0NEgyMzUuNDhxMC05LjEzNCAyLjMxNi0xNy42NTkgMi4zMTctOC41MjUgNi40ODctMTQuOTE5IDQuNDAxLTYuNjk4IDEwLjE5Mi0xMC42NTYgNi4wMjMtMy45NTggMTMuNDM2LTMuOTU4aDU2LjUyMnYxNi43NDVoLTU2LjUyMmwtMi4wODUgMi43NDFxLTEuODUzIDIuNDM1LTMuMjQzIDQuODcxLS42OTUgMS41MjItMS4xNTggMi40MzYtLjIzMi45MTMtLjIzMiAyLjEzMSAwIC42MDkuOTI3IDMuMDQ0aDU3LjY4cTIuNTQ4IDAgNC44NjUgMi40MzYgMi4zMTYgMi40MzYgMy43MDYgNi4wODkgMS42MjIgMy42NTQgMi41NDggNy42MTIuOTI3IDMuOTU4LjkyNyA2LjY5OCAwIDQuMjYzLTEuMzkgOC41MjUtMS4xNTggNC4yNjItMy40NzUgNy45MTYtMi4wODUgMy4zNDktNS4wOTYgNS43ODUtMy4wMTIgMi4xMzEtNi40ODYgMi4xMzFoLTk2LjM2NnonLz48cGF0aCBkPSdNMTUxLjMzNyA3Mi45MTZ2MzEuNjY0aC0xOC41MzJWNDEuODYxcS45MjctMy4wNDUgMi43OC02LjA4OSAyLjA4NS0zLjA0NSA0LjYzMy01LjE3NiAyLjU0OC0yLjQzNiA1LjA5Ni0zLjY1NCAyLjU0OS0xLjUyMiA0LjYzMy0xLjUyMmg3NS41MTh2NzkuMTZoLTE5LjQ1OVY3Mi45MTZ6bTU0LjY2OS0xNS4yMjNWNDMuOTkyaC00NS4xNzFxLTQuODY1IDEuNTIyLTYuNzE4IDMuNjU0LTEuODUzIDIuMTMxLTIuNzggNi4zOTN2My42NTR6TTQwLjAyMSA2Ni44MjdIMjYuNTg2cS40NjMtMy45NTggMi4wODQtOC41MjUgMS42MjItNC44NzIgNi4yNTUtMTIuMTc5IDIuMDg1LTMuMzQ5IDUuMDk2LTcuMDAyIDMuMDEyLTMuNjU0IDYuOTUtNi4zOTQgMy45MzgtMy4wNDUgOC4zMzktNC44NzEgNC40MDEtMi4xMzIgOC44MDMtMi40MzZoNTcuMjE3djE2Ljc0NUg2Ny4zNTZxLTEuMzkuNjA5LTIuNzggMS41MjMtMS4zOS45MTMtMy40NzUgMy42NTN0LTMuMDExIDQuODcycS0uOTI3IDIuMTMxLTEuMzkgNS4xNzVoNTcuNjh2MTUuMjI0SDY2LjQyOXEtMi41NDggMC01LjA5NiA0LjU2Ni0yLjU0OCA0LjI2My0zLjkzOCAxMC42NTdoNjYuMDJ2MTYuNzQ1SDI2LjU4NnEwLTMuOTU4IDEuMTU4LTguODI5IDEuMzktNC44NzIgMy43MDYtOS43NDMgMi4zMTctNS4xNzYgNS4zMjgtMTAuMDQ3IDMuMDEyLTUuMTc2IDYuMjU1LTkuMTM0eicvPjwvZz48ZGVmcyBpZD0nZGVmczQ2MTUnPjxsaW5lYXJHcmFkaWVudCBpZD0nbGluZWFyR3JhZGllbnQ0OTQ2Jz48c3RvcCBvZmZzZXQ9JzAnIGlkPSdzdG9wNDk0Micgc3RvcC1jb2xvcj0nIzNjNmNkZScvPjxzdG9wIG9mZnNldD0nMScgaWQ9J3N0b3A0OTQ0JyBzdG9wLWNvbG9yPScjNmQ5OWZmJy8+PC9saW5lYXJHcmFkaWVudD48ZmlsdGVyIGlkPSduYkVQeHdyS3pmd3FhZzdBOUFvSGpjQ3pvcmZLRnJ5dycgeD0nLTInIHk9Jy0yJyB3aWR0aD0nNCcgaGVpZ2h0PSc0Jz48ZmVPZmZzZXQgaW49J1NvdXJjZUFscGhhJyByZXN1bHQ9J29mZk91dCcgZHg9JzcuNScgZHk9JzcuNScgaWQ9J2ZlT2Zmc2V0NDYwNCcvPjxmZUdhdXNzaWFuQmx1ciBpbj0nb2ZmT3V0JyByZXN1bHQ9J2JsdXJPdXQnIHN0ZERldmlhdGlvbj0nNS42MjUnIGlkPSdmZUdhdXNzaWFuQmx1cjQ2MDYnLz48ZmVDb21wb25lbnRUcmFuc2ZlciBpbj0nYmx1ck91dCcgcmVzdWx0PSdvcGFjT3V0JyBpZD0nZmVDb21wb25lbnRUcmFuc2ZlcjQ2MTAnPjxmZUZ1bmNBIHR5cGU9J3RhYmxlJyB0YWJsZVZhbHVlcz0nMCAwLjUnIGlkPSdmZUZ1bmNBNDYwOCcvPjwvZmVDb21wb25lbnRUcmFuc2Zlcj48ZmVCbGVuZCBpbj0nU291cmNlR3JhcGhpYycgaW4yPSdvcGFjT3V0JyBpZD0nZmVCbGVuZDQ2MTInLz48L2ZpbHRlcj48bGluZWFyR3JhZGllbnQgeGxpbms6aHJlZj0nI2xpbmVhckdyYWRpZW50NDk0NicgaWQ9J2xpbmVhckdyYWRpZW50NDk0OCcgeDE9JzI2LjU4NicgeTE9JzY1JyB4Mj0nODczLjQxNCcgeTI9JzY1JyBncmFkaWVudFVuaXRzPSd1c2VyU3BhY2VPblVzZScvPjwvZGVmcz48L3N2Zz4=" alt="Easynews Stremio Addon Logo" class="logo">
     <h1>Easynews Stremio Addon</h1>
-    <form>
+    <form id="loginForm">
         <input type="text" id="username" name="username" placeholder="Username" required>
         <input type="password" id="password" name="password" placeholder="Password" required>
         <button type="submit">Install</button>
         <p class="error" id="error-message"></p>
     </form>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const response = await fetch('/manifest.json?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
+            if (response.ok) {
+                const manifest = await response.json();
+                window.location.href = 'stremio://' + window.location.host + '/manifest.json?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password);
+            } else {
+                document.getElementById('error-message').textContent = 'Invalid credentials';
+            }
+        });
+    </script>
 </body>
 </html>
-
-
-  
   `;
   return new Response(html, { headers: { 'Content-Type': 'text/html' } });
 }
