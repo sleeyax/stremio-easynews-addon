@@ -2,7 +2,7 @@ import { createBasic } from './utils';
 import { EasynewsSearchResponse, FileData, SearchOptions } from './types';
 
 export class EasynewsAPI {
-  private readonly baseUrl = 'https://members.easynews.com';
+  private readonly baseUrl = 'https://members2.easynews.com';
   private readonly headers: Headers;
 
   constructor(options: { username: string; password: string }) {
@@ -75,7 +75,10 @@ export class EasynewsAPI {
       res = await this.search({ ...options, pageNr });
 
       // No more results.
-      if (res.data.length === 0 || data[0]?.['0'] === res.data[0]?.['0']) {
+      if (
+        (res.data ?? []).length === 0 ||
+        data[0]?.['0'] === res.data[0]?.['0']
+      ) {
         break;
       }
 
