@@ -1,6 +1,6 @@
 {
   "name": "@easynews/cloudflare-worker",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "scripts": {
     "dev": "wrangler dev src/index.ts",
     "deploy": "wrangler deploy --minify src/index.ts",
