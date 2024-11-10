@@ -22,12 +22,8 @@ export function isBadVideo(file: FileData) {
 export function sanitizeTitle(title: string) {
   return (
     title
-      // replace common separators with spaces
-      .replaceAll('-', ' ')
-      .replaceAll('_', ' ')
-      .replaceAll('.', ' ')
-      // remove non-alphanumeric characters
-      .replace(/[^\w\s]/g, '')
+      // replace common separators (., _, -, whitespace) with a single space
+      .replace(/[\.\-_\s]+/g, ' ')
       // remove spaces at the beginning and end
       .trim()
   );
