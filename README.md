@@ -1,4 +1,7 @@
-# stremio-easynews-addon (Easynews+)
+# Easynews+
+
+> [!NOTE]  
+> I am not affiliated with Easynews in any way. This project is a fan-made addon for Stremio that provides access to Easynews content. You need an active Easynews subscription to use this addon.
 
 Provides content from Easynews & includes a search catalog. This addon can also be [self-hosted](#self-hosting).
 
