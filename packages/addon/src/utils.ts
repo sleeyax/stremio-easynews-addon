@@ -23,14 +23,17 @@ export function sanitizeTitle(title: string) {
   return (
     title
       // replace common separators (., _, -, whitespace) with a single space
-      .replace(/[\.\-_\s]+/g, ' ')
-      // remove spaces at the beginning and end
+      .replace(/[\.\-_:\s]+/g, ' ')
+      // replace common symbols with words
+      .replaceAll('&', 'and')
+      // to lowercase + remove spaces at the beginning and end
+      .toLowerCase()
       .trim()
   );
 }
 
 export function matchesTitle(title: string, query: string, strict: boolean) {
-  const sanitizedQuery = query.toLowerCase().trim();
+  const sanitizedQuery = sanitizeTitle(query);
 
   if (strict) {
     const { title: movieTitle } = parseTorrentTitle(title);
@@ -39,7 +42,7 @@ export function matchesTitle(title: string, query: string, strict: boolean) {
     }
   }
 
-  const sanitizedTitle = sanitizeTitle(title).toLowerCase().trim();
+  const sanitizedTitle = sanitizeTitle(title);
   const re = new RegExp(`\\b${sanitizedQuery}\\b`, 'i'); // match the whole word; e.g. query "deadpool 2" shouldn't match "deadpool 2016"
   return re.test(sanitizedTitle);
 }
