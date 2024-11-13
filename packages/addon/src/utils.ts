@@ -22,10 +22,12 @@ export function isBadVideo(file: FileData) {
 export function sanitizeTitle(title: string) {
   return (
     title
-      // replace common separators (., _, -, whitespace) with a single space
-      .replace(/[\.\-_:\s]+/g, ' ')
       // replace common symbols with words
       .replaceAll('&', 'and')
+      // replace common separators (., _, -, whitespace) with a single space
+      .replace(/[\.\-_:\s]+/g, ' ')
+      // remove non-alphanumeric characters except for accented characters
+      .replace(/[^\w\sÀ-ÿ]/g, '')
       // to lowercase + remove spaces at the beginning and end
       .toLowerCase()
       .trim()
@@ -38,7 +40,7 @@ export function matchesTitle(title: string, query: string, strict: boolean) {
   if (strict) {
     const { title: movieTitle } = parseTorrentTitle(title);
     if (movieTitle) {
-      return movieTitle.toLowerCase().trim() === sanitizedQuery;
+      return sanitizeTitle(movieTitle) === sanitizedQuery;
     }
   }
 
