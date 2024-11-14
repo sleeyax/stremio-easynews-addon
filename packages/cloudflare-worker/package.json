@@ -2,6 +2,7 @@
   "name": "@easynews/cloudflare-worker",
   "version": "1.3.4",
   "scripts": {
+    "test": "vitest run --passWithNoTests",
     "dev": "wrangler dev src/index.ts",
     "deploy": "wrangler deploy --minify src/index.ts",
     "build": "exit 0"
