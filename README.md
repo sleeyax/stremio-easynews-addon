@@ -19,6 +19,24 @@ Initially I wanted to simply add the search catalog to the existing Easynews add
 
 The goal of this addon is to provide more features, better performance, self-host-ability and an open-source codebase for anyone to contribute to.
 
+### Why can't I find show X or movie Y?
+
+Golden rule of thumb: look it up on [Easynews web search](https://members.easynews.com/). If you can't find it there, or it's only returning bad quality results (duration < 5 minutes, marked as spam, no video etc.), you won't find it using the addon either.
+
+If you do find your content through the web search however, it may be because the addon can't match the resulting titles returned by the Easynews API names with the metadata from Stremio, or it's in the wrong format.
+
+A couple of examples where the addon won't be able to find results:
+
+- The anime series `death note` doesn't follow the conventional season number + episode number standard. The show has titles like `Death Note 02` instead of the expected format `Death Note S01E02`.
+- For the movie `Mission: Impossible - Dead Reckoning Part One (2023)` Stremio's metadata returns only `dead reckoning` for this title, making it impossible (pun not intended) to match. Movie titles are strictly matched by their full title.
+- The real title of the movie `WALL-E (2008)` contains an annoying 'dot' special character: `WALL·E`. This should be converted to a `-` character, but the addon converts that character already to a space because this sanitization is needed for 99% of the other titles. No results for `WALL E` will be returned (actually, no results for `WALL-E` either, but it still serves as a good example).
+
+There are more oddly titled file names returned by EasyNews. The good news is they are a minority. The bad news is that addon can't possibly support all of these edge cases because that would slow down the search query exponentially and put more stress on both the addon's server and Easynews API, ultimately impacting the performance.
+
+We try to match most shows, but for the remaining 10-20% of edge cases we currently require you to use the EN+ search catalog instead. Maybe this wil improve in the future. If you have any suggestions to improve this system, please [let us know](https://github.com/sleeyax/stremio-easynews-addon/discussions).
+
+In any case, feel free to [open an issue](https://github.com/sleeyax/stremio-easynews-addon/issues/new?labels=missing+content&title=Missing+content+for+%27TITLE+SEASON+EPISODE+%27) if you think the addon should be able to find a specific show or movie. It helps us improve the addon.
+
 ## Self-hosting
 
 To get results in a fast and private manner, you may wish to self-host the addon. This is easy to do, and only requires a few steps. We support multiple ways of self-hosting:
