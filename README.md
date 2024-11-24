@@ -56,7 +56,7 @@ $ docker run -p 8080:1337 stremio-easynews-addon
 
 Navigate to `http://localhost:8080/` in your browser to verify that the addon is running.
 
-### Node.js
+### From source
 
 If you'd rather run directly from source, you can do so with [Node.js](https://nodejs.org/en/download/prebuilt-installer/current). Make sure you have NPM 7 or higher installed on your system. We also recommend Node 20 or higher, though older versions might still work.
 
