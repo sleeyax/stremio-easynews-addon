@@ -15,7 +15,9 @@ Easynews is a premium Usenet provider that offers a web-based Usenet browser. It
 
 ### Why not extend the existing Easynews addon?
 
-The original Easynews addon for Stremio is lacking features, contains bug and its developer is inactive to say the least (I did everything in my power to reach out to them, but they haven't responded since July 8 2024). It doesn't help that the original addon is closed-source too, which makes it difficult to contribute to the project. This addon aims to provide a better alternative by offering more features, better performance, and an open-source codebase that anyone can contribute to.
+Initially I wanted to simply add the search catalog to the existing Easynews addon but when the developer didn't respond to my query, and the code wasn't open source for me to add it myself, I decided to create my own addon.
+
+The goal of this addon is to provide more features, better performance, self-host-ability and an open-source codebase for anyone to contribute to.
 
 ## Self-hosting
 
