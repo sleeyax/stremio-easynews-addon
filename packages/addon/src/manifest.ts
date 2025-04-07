@@ -18,7 +18,9 @@ export const catalog: ManifestCatalog = {
 const sortOptions = humanReadableSortOptions as any;
 const directionOptions = humanReadableDirections as any;
 
-export const manifest: Manifest = {
+export const manifest: Manifest & {
+  stremioAddonsConfig: { issuer: string; signature: string };
+} = {
   id: 'community.easynews-plus',
   version,
   description,
@@ -80,4 +82,9 @@ export const manifest: Manifest = {
       default: 'Descending' satisfies DirectionKey,
     },
   ],
+  stremioAddonsConfig: {
+    issuer: 'https://stremio-addons.net',
+    signature:
+      'eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..sTSjsQkUq2uSSxmLIPlfVw.OvjIByO6oPi73f5KG6qKJRxiiRNv4-YVeW3ywzquK8wTh0mSKJnrdaFFiSzW7lHliaH_adh_VN-PNtH4VBSRbWfN-xbDfNw5KcRx9oRFAEAt0adV-dF1oF03dG9Oupqj.aK03nhKF4q4uc-s1ADiZfg',
+  },
 };
