@@ -1,7 +1,11 @@
-import { Cache, MetaDetail, MetaVideo, Stream } from 'stremio-addon-sdk';
-import addonBuilder from 'stremio-addon-sdk/src/builder';
-import landingTemplate from 'stremio-addon-sdk/src/landingTemplate';
-import { catalog, manifest } from './manifest';
+import {
+  Cache,
+  MetaDetail,
+  MetaVideo,
+  Stream,
+  AddonBuilder,
+} from '@stremio-addon/sdk';
+import { catalog, manifest } from './manifest.js';
 import {
   buildSearchQuery,
   createStreamAuth,
@@ -16,16 +20,34 @@ import {
   isBadVideo,
   logError,
   matchesTitle,
-} from './utils';
+} from './utils.js';
 import { EasynewsAPI, SearchOptions, createBasic } from '@easynews/api';
-import { publicMetaProvider } from './meta';
-import { fromHumanReadable, toDirection } from './sort-option';
+import { publicMetaProvider } from './meta.js';
+import { fromHumanReadable, toDirection } from './sort-option.js';
+import { landingTemplate } from '@stremio-addon/compat/landing-template';
 
-const builder = new addonBuilder(manifest);
+type Config = {
+  username: string;
+  password: string;
+  sort1?: string;
+  sort1Direction?: string;
+  sort2?: string;
+  sort2Direction?: string;
+  sort3?: string;
+  sort3Direction?: string;
+};
+
+const builder = new AddonBuilder(manifest);
 
 const prefix = `${catalog.id}:`;
 
-builder.defineCatalogHandler(async ({ extra: { search } }) => {
+builder.defineCatalogHandler<Config>(async ({ extra: { search } }) => {
+  if (!search) {
+    return {
+      metas: [],
+    };
+  }
+
   return {
     metas: [
       {
@@ -43,7 +65,7 @@ builder.defineCatalogHandler(async ({ extra: { search } }) => {
   };
 });
 
-builder.defineMetaHandler(
+builder.defineMetaHandler<Config>(
   async ({ id, type, config: { username, password } }) => {
     try {
       if (!id.startsWith(catalog.id)) {
@@ -111,7 +133,7 @@ builder.defineMetaHandler(
   }
 );
 
-builder.defineStreamHandler(
+builder.defineStreamHandler<Config>(
   async ({ id, type, config: { username, password, ...options } }) => {
     try {
       if (!id.startsWith('tt')) {

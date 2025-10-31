@@ -1,4 +1,4 @@
-import { extractDigits } from './utils';
+import { extractDigits } from './utils.js';
 
 export type MetaProviderResponse = {
   name: string;

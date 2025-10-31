@@ -1,5 +1,5 @@
-import { createBasic } from './utils';
-import { EasynewsSearchResponse, FileData, SearchOptions } from './types';
+import { createBasic } from './utils.js';
+import { EasynewsSearchResponse, FileData, SearchOptions } from './types.js';
 
 export class EasynewsAPI {
   private readonly baseUrl = 'https://members.easynews.com';

@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from './utils';
+import { capitalizeFirstLetter } from './utils.js';
 
 export enum SortOption {
   Relevance = 'relevance',
