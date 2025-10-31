@@ -1,11 +1,13 @@
-import { Manifest, ManifestCatalog } from 'stremio-addon-sdk';
+import { Manifest, ManifestCatalog } from '@stremio-addon/sdk';
 import {
   DirectionKey,
   humanReadableDirections,
   humanReadableSortOptions,
   toHumanReadable,
-} from './sort-option';
-const { version, description } = require('../package.json');
+} from './sort-option.js';
+import packageJson from '../package.json' with { type: 'json' };
+
+const { version, description } = packageJson;
 
 export const catalog: ManifestCatalog = {
   id: 'easynews-plus',

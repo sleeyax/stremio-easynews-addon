@@ -1,6 +1,6 @@
 import { EasynewsSearchResponse, FileData } from '@easynews/api';
-import { MetaProviderResponse } from './meta';
-import { ContentType } from 'stremio-addon-sdk';
+import { MetaProviderResponse } from './meta.js';
+import { ContentType } from '@stremio-addon/sdk';
 import { parse as parseTorrentTitle } from 'parse-torrent-title';
 
 export function isBadVideo(file: FileData) {
