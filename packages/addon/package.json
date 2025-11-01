@@ -14,8 +14,8 @@
   "description": "Provides content from Easynews & includes a search catalog. This addon can also be self-hosted.",
   "dependencies": {
     "@easynews/api": "^1.0.0",
-    "@stremio-addon/compat": "^0.0.5",
-    "@stremio-addon/sdk": "^0.0.2",
+    "@stremio-addon/compat": "^0.0.6",
+    "@stremio-addon/sdk": "^0.1.0",
     "parse-torrent-title": "^1.4.0"
   }
 }
