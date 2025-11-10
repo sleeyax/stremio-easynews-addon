@@ -8,7 +8,6 @@ import {
 import { catalog, manifest } from './manifest.js';
 import {
   buildSearchQuery,
-  createStreamAuth,
   createStreamPath,
   createStreamUrl,
   createThumbnailUrl,
@@ -94,14 +93,12 @@ builder.defineMetaHandler<Config>(
           thumbnail: createThumbnailUrl(res, file),
           streams: [
             mapStream({
-              username,
-              password,
               title,
               fullResolution: file.fullres,
               fileExtension: getFileExtension(file),
               duration: getDuration(file),
               size: getSize(file),
-              url: `${createStreamUrl(res)}/${createStreamPath(file)}|${createStreamAuth(username, password)}`,
+              url: `${createStreamUrl(res, username, password)}/${createStreamPath(file)}`,
               videoSize: file.rawSize,
             }),
           ],
@@ -206,14 +203,12 @@ builder.defineStreamHandler<Config>(
 
         streams.push(
           mapStream({
-            username,
-            password,
             fullResolution: file.fullres,
             fileExtension: getFileExtension(file),
             duration: getDuration(file),
             size: getSize(file),
             title,
-            url: `${createStreamUrl(res)}/${createStreamPath(file)}`,
+            url: `${createStreamUrl(res, username, password)}/${createStreamPath(file)}`,
             videoSize: file.rawSize,
           })
         );
@@ -232,8 +227,6 @@ builder.defineStreamHandler<Config>(
 );
 
 function mapStream({
-  username,
-  password,
   duration,
   size,
   fullResolution,
@@ -244,8 +237,6 @@ function mapStream({
 }: {
   title: string;
   url: string;
-  username: string;
-  password: string;
   fileExtension: string;
   videoSize: number | undefined;
   duration: string | undefined;
@@ -263,13 +254,6 @@ function mapStream({
     ].join('\n'),
     url: url,
     behaviorHints: {
-      notWebReady: true,
-      proxyHeaders: {
-        request: {
-          'User-Agent': 'Stremio',
-          Authorization: createBasic(username, password),
-        },
-      },
       fileName: title,
       videoSize,
     } as Stream['behaviorHints'],
