@@ -49,12 +49,18 @@ export function matchesTitle(title: string, query: string, strict: boolean) {
   return re.test(sanitizedTitle);
 }
 
-export function createStreamUrl({
-  downURL,
-  dlFarm,
-  dlPort,
-}: Pick<EasynewsSearchResponse, 'downURL' | 'dlFarm' | 'dlPort'>) {
-  return `${downURL}/${dlFarm}/${dlPort}`;
+export function createStreamUrl(
+  {
+    downURL,
+    dlFarm,
+    dlPort,
+  }: Pick<EasynewsSearchResponse, 'downURL' | 'dlFarm' | 'dlPort'>,
+  usename: String,
+  password: String
+) {
+  const downURLWithAuth = downURL.replace('://', `://${usename}:${password}@`);
+
+  return `${downURLWithAuth}/${dlFarm}/${dlPort}`;
 }
 
 export function createStreamPath(file: FileData) {
@@ -63,10 +69,6 @@ export function createStreamPath(file: FileData) {
   const ext = file['11'] ?? '';
 
   return `${postHash}${ext}/${postTitle}${ext}`;
-}
-
-export function createStreamAuth(username: string, password: string) {
-  return `Authorization=${encodeURIComponent(username + ':' + password)}`;
 }
 
 export function getFileExtension(file: FileData) {
