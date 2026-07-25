@@ -1,17 +1,19 @@
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
+
+ENV PNPM_HOME=/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+RUN corepack enable
 
 WORKDIR /build
 
-# Copy LICENSE file.
-COPY LICENSE ./
+# Copy every workspace manifest: --frozen-lockfile validates the lockfile against all projects it finds, so a missing one fails the check.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/api/package.json ./packages/api/
+COPY packages/addon/package.json ./packages/addon/
+COPY packages/cloudflare-worker/package.json ./packages/cloudflare-worker/
 
-# Copy the relevant package.json and package-lock.json files.
-COPY package*.json ./
-COPY packages/api/package*.json ./packages/api/
-COPY packages/addon/package*.json ./packages/addon/
-
-# Install dependencies.
-RUN npm install
+# Install the addon and its dependencies only, leaving the cloudflare worker's toolchain out of the image.
+RUN pnpm install --frozen-lockfile --filter "@easynews/addon..."
 
 # Copy source files.
 COPY tsconfig.*json ./
@@ -19,25 +21,19 @@ COPY packages/api ./packages/api
 COPY packages/addon ./packages/addon
 
 # Build the project.
-RUN npm run build
+RUN pnpm --filter "@easynews/addon..." run build
 
-# Remove development dependencies.
-RUN npm --workspaces prune --omit=dev
+# Collect the addon and its workspace dependencies into a single self-contained directory.
+RUN pnpm deploy --filter=@easynews/addon --prod /out
 
-FROM node:22-alpine AS final
+FROM node:24-alpine AS final
 
 WORKDIR /app
 
-# Copy the built files from the builder.
-# The package.json files must be copied as well for NPM workspace symlinks between local packages to work.
-COPY --from=builder /build/package*.json /build/LICENSE ./
-COPY --from=builder /build/packages/addon/package.*json ./packages/addon/
-COPY --from=builder /build/packages/api/package.*json ./packages/api/
-COPY --from=builder /build/packages/addon/dist ./packages/addon/dist
-COPY --from=builder /build/packages/api/dist ./packages/api/dist
-
-COPY --from=builder /build/node_modules ./node_modules
+# The LICENSE lives at the repository root, so it isn't part of the deployed package.
+COPY LICENSE ./
+COPY --from=builder /out ./
 
 EXPOSE 1337
 
-ENTRYPOINT ["npm", "run", "start:addon"]
+ENTRYPOINT ["node", "dist/server.js"]

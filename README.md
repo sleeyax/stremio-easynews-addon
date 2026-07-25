@@ -49,9 +49,9 @@ Follow the [getting started guide](https://developers.cloudflare.com/workers/get
 
 ```bash
 $ git clone https://github.com/sleeyax/stremio-easynews-addon.git && cd stremio-easynews-addon
-$ npm i
-$ npm run build
-$ npm run deploy:cloudflare-worker
+$ pnpm install
+$ pnpm build
+$ pnpm deploy:cloudflare-worker
 ```
 
 Navigate to the URL provided by Cloudflare to verify that the addon is running. It should look something like `https://stremio-easynews-addon.yourname.workers.dev/`.
@@ -76,24 +76,24 @@ Navigate to `http://localhost:8080/` in your browser to verify that the addon is
 
 ### From source
 
-If you'd rather run directly from source, you can do so with [Node.js](https://nodejs.org/en/download/prebuilt-installer/current). Make sure you have NPM 7 or higher installed on your system. We also recommend Node 20 or higher, though older versions might still work.
+If you'd rather run directly from source, you can do so with [Node.js](https://nodejs.org/en/download/prebuilt-installer/current). We use [pnpm](https://pnpm.io/) as our package manager; the easiest way to get the right version is `corepack enable`, which picks it up from the `packageManager` field in `package.json`. We recommend Node 24 or higher, though older versions might still work.
 
 ```bash
-# version should be >= 20
+# version should be >= 24
 $ node -v
-# version must be >= 7
-$ npm -v
+# version should be >= 11
+$ pnpm -v
 $ git clone https://github.com/sleeyax/stremio-easynews-addon.git && cd stremio-easynews-addon
-$ npm i
-$ npm run build
+$ pnpm install
+$ pnpm build
 # starts the addon in production mode
-$ npm run start:addon
+$ pnpm start:addon
 ```
 
 Navigate to `http://localhost:1337/` in your browser to verify that the addon is running. You can set the `PORT` environment variable to change the listener port. For example, to run the addon on port `8080`:
 
 ```bash
-$ PORT=8080 npm run start:addon
+$ PORT=8080 pnpm start:addon
 ```
 
 ---
@@ -111,16 +111,16 @@ Clone the repository and install the dependencies:
 ```bash
 $ git clone https://github.com/sleeyax/stremio-easynews-addon.git
 $ cd stremio-easynews-addon
-$ npm i
+$ pnpm install
 ```
 
 Run the easynews addon in development mode:
 
 ```bash
 # addon
-$ npm run start:addon:dev
+$ pnpm start:addon:dev
 # cloudflare worker
-$ npm run start:cloudflare-worker:dev
+$ pnpm start:cloudflare-worker:dev
 ```
 
 ### Production
@@ -128,13 +128,13 @@ $ npm run start:cloudflare-worker:dev
 To deploy the addon to beamup, run:
 
 ```bash
-$ npm run deploy:beamup
+$ pnpm deploy:beamup
 ```
 
 To release a new version of the addon:
 
 ```bash
-$ npm version <major|minor|patch>
+$ pnpm version <major|minor|patch>
 $ git push --follow-tags
 ```
 
