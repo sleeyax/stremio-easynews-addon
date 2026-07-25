@@ -3,16 +3,16 @@
   "version": "1.3.8",
   "main": "dist/server.js",
   "scripts": {
-    "test": "npm run test --workspaces",
+    "test": "pnpm -r test",
     "format": "prettier --write .",
-    "build": "npm -w packages/api run build && npm -w packages/addon run build",
+    "build": "pnpm -r build",
     "build:watch": "tsc --build --watch",
-    "start:addon": "npm -w packages/addon start",
-    "start:addon:dev": "npm -w packages/addon run start:dev",
-    "start:cloudflare-worker:dev": "npm -w packages/cloudflare-worker run dev",
+    "start:addon": "pnpm --filter @easynews/addon run start",
+    "start:addon:dev": "pnpm --filter @easynews/addon run start:dev",
+    "start:cloudflare-worker:dev": "pnpm --filter @easynews/cloudflare-worker run dev",
     "deploy:beamup": "beamup",
-    "deploy:cloudflare-worker": "npm -w packages/cloudflare-worker run deploy",
-    "version": "npm version $npm_package_version --workspaces && git add **/package.json"
+    "deploy:cloudflare-worker": "pnpm --filter @easynews/cloudflare-worker run deploy",
+    "version": "pnpm -r pkg set version=$npm_package_version && git add packages/*/package.json"
   },
   "keywords": [
     "stremio easynews addon",
@@ -21,20 +21,14 @@
   "author": "Sleeyax",
   "license": "MIT",
   "description": "Provides content from Easynews & includes a search catalog. This addon can also be self-hosted.",
-  "workspaces": [
-    "packages/*"
-  ],
+  "packageManager": "pnpm@11.9.0",
   "engines": {
-    "node": ">=20.0.0",
-    "npm": ">=7.0.0"
+    "node": ">=24.0.0",
+    "pnpm": ">=11.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.14.10",
     "beamup-cli": "^1.3.2",
-    "cross-env": "^7.0.3",
     "prettier": "^3.3.2",
-    "tsx": "^4.16.2",
-    "typescript": "^5.5.3",
-    "vitest": "^2.1.5"
+    "typescript": "^5.5.3"
   }
 }

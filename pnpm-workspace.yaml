@@ -1,0 +1,13 @@
+packages:
+  - 'packages/*'
+
+# The alternative, injectWorkspacePackages, would replace the workspace symlinks with copies and break live local development against @easynews/api.
+forceLegacyDeploy: true
+
+allowBuilds:
+  # Needed by wrangler to run and deploy the cloudflare worker.
+  esbuild: true
+  workerd: true
+  # Optional native speedups for beamup-cli's SSH transport; it falls back to pure JS.
+  cpu-features: false
+  ssh2: false

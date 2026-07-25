@@ -6,8 +6,9 @@
       "type": "node",
       "request": "launch",
       "program": "src/server.ts",
+      "cwd": "${workspaceFolder}/packages/addon",
       "localRoot": "${workspaceFolder}/packages/addon",
-      "runtimeExecutable": "tsx",
+      "runtimeExecutable": "${workspaceFolder}/packages/addon/node_modules/.bin/tsx",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**"]
