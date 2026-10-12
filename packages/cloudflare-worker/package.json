@@ -9,12 +9,14 @@
     "build": "exit 0"
   },
   "dependencies": {
-    "@easynews/addon": "^1.0.0",
+    "@easynews/addon": "workspace:*",
     "@stremio-addon/sdk": "^0.1.0",
     "hono": "^4.5.3"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240529.0",
+    "typescript": "^5.5.3",
+    "vitest": "^2.1.5",
     "wrangler": "^4.45.3"
   }
 }
