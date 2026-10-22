@@ -1,4 +1,4 @@
-FROM node:24-alpine AS builder
+FROM node:24.22.1-alpine AS builder
 
 ENV PNPM_HOME=/pnpm
 ENV PATH=$PNPM_HOME:$PATH
@@ -26,7 +26,7 @@ RUN pnpm --filter "@easynews/addon..." run build
 # Collect the addon and its workspace dependencies into a single self-contained directory.
 RUN pnpm deploy --filter=@easynews/addon --prod /out
 
-FROM node:24-alpine AS final
+FROM node:24.22.1-alpine AS final
 
 WORKDIR /app
 
